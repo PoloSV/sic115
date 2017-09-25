@@ -1,2 +1,2 @@
 # sic115
-Proyecto para la materia Sistemas Contables, ciclo 02 2017
+Proyecto SIC-115, ciclo 02 2017
