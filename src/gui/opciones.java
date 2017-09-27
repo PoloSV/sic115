@@ -5,8 +5,6 @@
  */
 package gui;
 
-import modelo.User;
-
 /**
  *
  * @author jaquino
@@ -16,10 +14,9 @@ public class opciones extends javax.swing.JInternalFrame {
     /**
      * Creates new form opciones
      */
-    public opciones(User user) {
+    public opciones() {
         initComponents();
         jButton3.setText("Catalogo de Cuentas");
-        jLabel2.setText(user.toString());
     }
 
     /**

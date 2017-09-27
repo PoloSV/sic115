@@ -9,14 +9,12 @@ import java.awt.Dimension;
 import java.awt.Point;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import modelo.User;
 
 /**
  *
  * @author jaquino
  */
 public class Main extends javax.swing.JFrame {
-    User user;
     public Point centrar(JInternalFrame frame){
         Dimension desktopSize = desktop.getSize();
         Dimension jInternalFrameSize = frame.getSize();
@@ -29,7 +27,6 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
-        
     }
 
     /**
@@ -49,13 +46,6 @@ public class Main extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("SIC-115");
-        setExtendedState(6);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowOpened(java.awt.event.WindowEvent evt) {
-                formWindowOpened(evt);
-            }
-        });
 
         desktop.setDragMode(javax.swing.JDesktopPane.OUTLINE_DRAG_MODE);
 
@@ -63,11 +53,11 @@ public class Main extends javax.swing.JFrame {
         desktop.setLayout(desktopLayout);
         desktopLayout.setHorizontalGroup(
             desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 949, Short.MAX_VALUE)
+            .addGap(0, 600, Short.MAX_VALUE)
         );
         desktopLayout.setVerticalGroup(
             desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 534, Short.MAX_VALUE)
+            .addGap(0, 357, Short.MAX_VALUE)
         );
 
         jMenu1.setText("File");
@@ -81,7 +71,6 @@ public class Main extends javax.swing.JFrame {
         jMenu1.add(jMenuItem1);
 
         jMenuItem2.setText("Opciones");
-        jMenuItem2.setEnabled(false);
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
@@ -111,38 +100,25 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        if(jMenuItem2.isEnabled())
-            logout();
-        else
-            login();
+        login();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        opciones();
+        // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem2ActionPerformed
-
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-            //setExtendedState(JFrame.MAXIMIZED_BOTH);
-            login();
-    }//GEN-LAST:event_formWindowOpened
     private void login(){
-        login abrir = new login(jMenuItem1,jMenuItem2,user);
-        
+        login abrir = new login();
         abrir.setLocation(centrar(abrir));
+        
         desktop.add(abrir);
         abrir.show();
     }
     private void opciones(){
-        System.out.println(user);
-        opciones abrir = new opciones(user);
+        opciones abrir = new opciones();
         abrir.setLocation(centrar(abrir));
+        
         desktop.add(abrir);
         abrir.show();
-    }
-    private void logout(){
-        jMenuItem1.setText("Iniciar sesión...");
-        jMenuItem2.setEnabled(false);
-        user = null;
     }
     /**
      * @param args the command line arguments
@@ -174,8 +150,9 @@ public class Main extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Main newMain = new Main();
+                Main newMain =new  Main();
                 newMain.setVisible(true);
+                newMain.opciones();
                 //newMain.setExtendedState(newMain.getExtendedState() | JFrame.MAXIMIZED_BOTH);
             }
         });
