@@ -28,4 +28,8 @@ public class User {
         this.password = password;
     }
     private String password;
+    
+    public String toString(){
+        return username;
+    }
 }
