@@ -3,21 +3,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package gui;
+package frm;
 
 import db.UserDB;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import modelo.User;
 
 /**
  *
  * @author jaquino
  */
-public class login extends javax.swing.JInternalFrame {
-
+public class Login extends javax.swing.JInternalFrame {
+    JMenuItem jMenuItem1;
+    JMenu jMenuCuentas;
     /**
      * Creates new form NewJInternalFrame
      */
-    public login() {
+    public Login(JMenuItem jMenuItem1,JMenu jMenuCuentas) {
         initComponents();
+        this.jMenuItem1 = jMenuItem1;
+        this.jMenuCuentas = jMenuCuentas;
     }
 
     @SuppressWarnings("unchecked")
@@ -29,10 +36,10 @@ public class login extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         tfPassword = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
 
         setClosable(true);
         setTitle("Login");
+        setVisible(true);
 
         jLabel1.setText("Usuario:");
 
@@ -44,8 +51,6 @@ public class login extends javax.swing.JInternalFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-
-        jLabel3.setText("jLabel3");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -62,8 +67,7 @@ public class login extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(tfUsername)
-                            .addComponent(tfPassword)))
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(tfPassword))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -77,21 +81,24 @@ public class login extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(tfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(UserDB.login(tfUsername.getText(),tfPassword.getText())!=null)
-            jLabel3.setText("Login completo");
+        User user = UserDB.login(tfUsername.getText(),tfPassword.getText());
+        if(user!=null){
+            //System.out.println(user);
+            jMenuItem1.setText("Cerrar sesión");
+            jMenuCuentas.setEnabled(true);
+            this.dispose();
+        }
         else
-            jLabel3.setText("Contraseña incorrecta.");
+            JOptionPane.showMessageDialog(this,"Contraseña incorrecta.");
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
@@ -99,7 +106,6 @@ public class login extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPasswordField tfPassword;
     private javax.swing.JTextField tfUsername;
     // End of variables declaration//GEN-END:variables
