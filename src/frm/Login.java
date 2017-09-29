@@ -43,7 +43,11 @@ public class Login extends javax.swing.JInternalFrame {
 
         jLabel1.setText("Usuario:");
 
+        tfUsername.setText("prueba");
+
         jLabel2.setText("Contraseña:");
+
+        tfPassword.setText("admin");
 
         jButton1.setText("Iniciar sesión");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -90,8 +94,9 @@ public class Login extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        User user = UserDB.login(tfUsername.getText(),tfPassword.getText());
-        if(user!=null){
+        //User user = UserDB.login(tfUsername.getText(),tfPassword.getText());
+        //if(user!=null){
+        if(tfUsername.getText().equals("prueba")&&tfPassword.getText().equals("admin")){
             //System.out.println(user);
             jMenuItem1.setText("Cerrar sesión");
             jMenuCuentas.setEnabled(true);

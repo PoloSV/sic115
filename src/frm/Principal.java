@@ -27,9 +27,8 @@ public class Principal extends javax.swing.JFrame {
     /**
      * Creates new form Main
      */
-    public Principal(User user,String appearance) {
+    public Principal() {
         this.user = user;
-        setAppearance(appearance);
         initComponents();
     }
 
@@ -50,6 +49,7 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SIC-115");
@@ -117,6 +117,14 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenuCuentas.add(jMenuItem2);
 
+        jMenuItem5.setText("Ajustes");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenuCuentas.add(jMenuItem5);
+
         jMenuBar1.add(jMenuCuentas);
 
         setJMenuBar(jMenuBar1);
@@ -170,6 +178,13 @@ public class Principal extends javax.swing.JFrame {
         desktop.add(abrir);
         abrir.show();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        Ajuste abrir = new Ajuste();
+        abrir.setLocation(centrar(abrir));
+        desktop.add(abrir);
+        abrir.show();
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
     private void login(){
         Login abrir = new Login(jMenuItem1,jMenuCuentas);
         abrir.setLocation(centrar(abrir));
@@ -186,26 +201,9 @@ public class Principal extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void setAppearance(String appearance){
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if (appearance.equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-    }
+    
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
+         /*Set the Nimbus look and feel
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -232,14 +230,13 @@ public class Principal extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        /*java.awt.EventQueue.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 Principal newMain = new Principal();
                 newMain.setVisible(true);
                 //newMain.setExtendedState(newMain.getExtendedState() | JFrame.MAXIMIZED_BOTH);
             }
         });
-        new Principal().login();*/
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -251,5 +248,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     // End of variables declaration//GEN-END:variables
 }

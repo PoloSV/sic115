@@ -33,11 +33,11 @@ public class Catalogo extends javax.swing.JInternalFrame {
     }
     public Catalogo() {
         initComponents();
-        CuentaDB cuenta = new CuentaDB();
-        inicializarColumnas();
+        /*CuentaDB cuenta = new CuentaDB();
+        nicializarColumnas();
         for(Cuenta c: cuenta.getCuentas())
             cuentaTB.cuentas.add(c);
-        jTable1.repaint();
+        jTable1.repaint();*/
     }
     public void inicializarColumnas(){
         TableColumnModel tColumnModel = new DefaultTableColumnModel();
@@ -89,7 +89,14 @@ public class Catalogo extends javax.swing.JInternalFrame {
 
         jButton3.setText("Editar");
 
-        jTable1.setModel(cuentaTB);
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
         jScrollPane1.setViewportView(jTable1);
 
         jCheckBox1.setText("Activos");
