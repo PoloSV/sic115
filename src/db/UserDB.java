@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modelo.User;
+import modelo.Usuario;
 public class UserDB {
     public static String md5Hash(String password) throws NoSuchAlgorithmException{
         MessageDigest m = MessageDigest.getInstance("MD5");
@@ -22,27 +22,27 @@ public class UserDB {
         }
         return hashtext;
     }
-    public ArrayList<User> users = new ArrayList<>();
-    public static User login(String username, String password){
-        User u = null;
-        String sentenciaSQL = "SELECT * FROM users WHERE username = ? AND password = ?";
-        try{
-            PreparedStatement ps = Conexion.getConexion().prepareStatement(sentenciaSQL);
-            ps.setString(1,username);
-            ps.setString(2, md5Hash(password));
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                u = new User();
-                u.setIdUser(rs.getInt("idUser"));
-                u.setUsername(rs.getString("username"));
-                u.setPassword(rs.getString("password"));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return u;
-    }
+    public ArrayList<Usuario> users = new ArrayList<>();
+//    public static Usuario login(String username, String password){
+//        Usuario u = null;
+//        String sentenciaSQL = "SELECT * FROM users WHERE username = ? AND password = ?";
+//        try{
+//            PreparedStatement ps = Conexion.getConexion().prepareStatement(sentenciaSQL);
+//            ps.setString(1,username);
+//            ps.setString(2, md5Hash(password));
+//            ResultSet rs = ps.executeQuery();
+//            while(rs.next()){
+//                u = new Usuario();
+//                u.setIdUser(rs.getInt("idUser"));
+//                u.setUsername(rs.getString("username"));
+//                u.setPassword(rs.getString("password"));
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (NoSuchAlgorithmException ex) {
+//            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return u;
+//    }
     
 }

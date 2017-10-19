@@ -5,12 +5,16 @@
  */
 package frm;
 
-import db.CuentaDB;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
+import java.util.ArrayList;
+import java.util.List;
 import modelo.Cuenta;
+import db.Consulta;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.math.BigDecimal;
+import javax.swing.JInternalFrame;
+import modelo.TipoCuenta;
 
 /**
  *
@@ -21,8 +25,80 @@ public class AddCuenta extends javax.swing.JInternalFrame {
     /**
      * Creates new form AddCuenta
      */
-    public AddCuenta() {
+    //Se crea el arreglo que recibe la consulta de la base, una copia del que recibe el catalogo.
+    List<Cuenta> lista = new ArrayList<>();
+    //Se divide en sub arreglos para agilizar la busqueda.
+    List<Cuenta> sub1 = new ArrayList<>();
+    List<Cuenta> sub2 = new ArrayList<>();
+    List<Cuenta> sub3 = new ArrayList<>();
+    List<Cuenta> sub4 = new ArrayList<>();
+    List<Cuenta> sub5 = new ArrayList<>();
+    List<Cuenta> sub6 = new ArrayList<>();
+    //Esta variable global error permite validar varias entradas a la vez
+    //ninguna debe dar error para poder guardar.
+    public boolean error = false;
+    //Esta variable guarda el ultimo dato que se puso en el textfield de codigo
+    //para agregar una subcuenta.
+    public String UltimaCuenta;
+    public boolean cuentaCerrada = false;
+
+    public AddCuenta(List<Cuenta> lista, boolean c) {
         initComponents();
+        this.lista = lista;
+        DivisionArreglos();
+        this.cuentaCerrada = c;
+
+    }
+
+    public AddCuenta(List<Cuenta> lista) {
+        initComponents();
+        this.lista = lista;
+        DivisionArreglos();
+
+    }
+
+    //Este metodo es llamado para restar el debe y haber, y para calcular el saldo
+    //y si es deudor o acreedor. Ademas trunca y aproxima el saldo solo por fines esteticos
+    //En la base se guarda el valor completo en BigDecimal.
+    public void verificarSaldo() {
+        try {
+            String tipoSaldo = "";
+            Double debe = Double.parseDouble(tfSumaDebe.getText());
+            Double haber = Double.parseDouble(tfSumaHaber.getText());
+            Double saldo = debe - haber;
+            saldo = Math.abs(saldo);
+            saldo = Math.rint(saldo * 10000) / 10000;
+            if (debe > haber) {
+                tipoSaldo = "DEUDOR";
+            } else if (debe < haber) {
+                tipoSaldo = "ACREEDOR";
+            } else {
+                tipoSaldo = "";
+            }
+            tfSaldo.setText(String.valueOf(saldo));
+            lbTipoSaldo.setText(tipoSaldo);
+        } catch (NumberFormatException e) {
+            tfSaldo.setText("");
+        }
+    }
+
+    //Esta funcion divide el arreglo lista en los 6 sub arreglos segun sea necesario.
+    public void DivisionArreglos() {
+        for (Cuenta x : lista) {
+            if (x.getCodigo() < 10) {
+                sub1.add(x);
+            } else if (x.getCodigo() < 100) {
+                sub2.add(x);
+            } else if (x.getCodigo() < 1000) {
+                sub3.add(x);
+            } else if (x.getCodigo() < 10000) {
+                sub4.add(x);
+            } else if (x.getCodigo() < 100000) {
+                sub5.add(x);
+            } else if (x.getCodigo() < 1000000) {
+                sub6.add(x);
+            }
+        }
     }
 
     /**
@@ -37,7 +113,6 @@ public class AddCuenta extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         tfNombreCuenta = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        cbTipoCuenta = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         tfCodigoCuenta = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -48,6 +123,13 @@ public class AddCuenta extends javax.swing.JInternalFrame {
         tfSaldo = new javax.swing.JTextField();
         cbAjustableCuenta = new javax.swing.JCheckBox();
         jButton1 = new javax.swing.JButton();
+        tfTipoCuenta = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        tfIndice = new javax.swing.JTextField();
+        errorCodigoPadre = new javax.swing.JLabel();
+        errorGeneral = new javax.swing.JLabel();
+        lbTipoSaldo = new javax.swing.JLabel();
+        cbOperable = new javax.swing.JCheckBox();
 
         setClosable(true);
         setResizable(true);
@@ -55,17 +137,75 @@ public class AddCuenta extends javax.swing.JInternalFrame {
 
         jLabel1.setText("Nombre:");
 
-        jLabel2.setText("Tipo:");
+        tfNombreCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfNombreCuentaActionPerformed(evt);
+            }
+        });
+        tfNombreCuenta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfNombreCuentaKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfNombreCuentaKeyTyped(evt);
+            }
+        });
 
-        cbTipoCuenta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activo", "Pasivo", "Capital" }));
+        jLabel2.setText("Subcuenta de:");
 
-        jLabel3.setText("Codigo:");
+        jLabel3.setText("Codigo Padre:");
 
-        jLabel4.setText("Suma Debe:");
+        tfCodigoCuenta.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                tfCodigoCuentaInputMethodTextChanged(evt);
+            }
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+        });
+        tfCodigoCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfCodigoCuentaActionPerformed(evt);
+            }
+        });
+        tfCodigoCuenta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfCodigoCuentaKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfCodigoCuentaKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfCodigoCuentaKeyTyped(evt);
+            }
+        });
 
-        jLabel5.setText("Suma Haber:");
+        jLabel4.setText("Suma Debe:   $");
 
-        jLabel6.setText("Saldo:");
+        tfSumaDebe.setText("0");
+        tfSumaDebe.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfSumaDebeKeyReleased(evt);
+            }
+        });
+
+        jLabel5.setText("Suma Haber: $");
+
+        tfSumaHaber.setText("0");
+        tfSumaHaber.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfSumaHaberKeyReleased(evt);
+            }
+        });
+
+        jLabel6.setText("Saldo:            $");
+
+        tfSaldo.setEditable(false);
+        tfSaldo.setText("0");
+        tfSaldo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfSaldoKeyReleased(evt);
+            }
+        });
 
         cbAjustableCuenta.setText("¿Es Ajustable?");
 
@@ -73,6 +213,38 @@ public class AddCuenta extends javax.swing.JInternalFrame {
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        tfTipoCuenta.setEnabled(false);
+        tfTipoCuenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfTipoCuentaActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Indice disponible:");
+
+        tfIndice.setEnabled(false);
+        tfIndice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfIndiceKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfIndiceKeyTyped(evt);
+            }
+        });
+
+        errorCodigoPadre.setBackground(new java.awt.Color(255, 0, 0));
+        errorCodigoPadre.setForeground(new java.awt.Color(204, 0, 0));
+
+        errorGeneral.setBackground(new java.awt.Color(255, 0, 51));
+        errorGeneral.setForeground(new java.awt.Color(255, 0, 51));
+
+        cbOperable.setText("¿Es operable?");
+        cbOperable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbOperableActionPerformed(evt);
             }
         });
 
@@ -85,30 +257,49 @@ public class AddCuenta extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfNombreCuenta)
-                            .addComponent(cbTipoCuenta, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tfCodigoCuenta)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel5))
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(tfSumaDebe)
-                            .addComponent(tfSumaHaber)))
+                            .addComponent(tfSumaHaber)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(tfSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(26, 26, 26)
+                                .addComponent(lbTipoSaldo)
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                        .addComponent(tfSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3))
+                                .addGap(31, 31, 31))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(18, 18, 18)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tfNombreCuenta)
+                            .addComponent(tfCodigoCuenta)
+                            .addComponent(tfTipoCuenta, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(tfIndice, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(errorCodigoPadre, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(cbAjustableCuenta)
+                        .addGap(10, 10, 10)
+                        .addComponent(cbOperable)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 58, Short.MAX_VALUE)
+                                .addComponent(errorGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(31, 31, 31)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -118,15 +309,21 @@ public class AddCuenta extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(tfNombreCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbTipoCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfTipoCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfIndice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
                     .addComponent(tfCodigoCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(errorCodigoPadre, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(tfSumaDebe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -137,42 +334,328 @@ public class AddCuenta extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(tfSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbTipoSaldo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cbAjustableCuenta)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbAjustableCuenta)
+                    .addComponent(cbOperable))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(errorGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //Funciones del boton agregar.
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        CuentaDB cDB = new CuentaDB();
-        Cuenta c = new Cuenta();
-        c.setAjustable(cbAjustableCuenta.isSelected());
-        c.setCodigoCuenta(tfCodigoCuenta.getText());
-        c.setNombreCuenta(tfNombreCuenta.getText());
-        c.setSaldo(Double.parseDouble(tfSaldo.getText()));
-        c.setSumaDebe(Double.parseDouble(tfSumaDebe.getText()));
-        c.setSumaHaber(Double.parseDouble(tfSumaHaber.getText()));
-        c.setTipoCuenta(cDB.getTipoCuenta(cbTipoCuenta.getSelectedIndex()+1));
-        try {
-            if(cDB.addCuenta(c)){
-                JOptionPane.showMessageDialog(this, "Cuenta Agregada correctamente.");
-                this.dispose();
+        //Se comienza validando cada campo, para evitar un error en la consulta.
+        if (tfNombreCuenta.getText().isEmpty()) {
+            errorGeneral.setText("El campo de nombre es obligatorio");
+        } else if (tfSumaDebe.getText().isEmpty() || tfSumaHaber.getText().isEmpty()) {
+            errorGeneral.setText("Campos debe o haber estan vacios.");
+        } else if (tfCodigoCuenta.getText().isEmpty()) {
+            errorGeneral.setText("Codigo de cuenta padre vacio.");
+        } else if (error) {
+            errorGeneral.setText("Debe corregir los errores.");
+        } else {
+            //Sin errores de ningun tipo se crean los objetos necesarios para la consulta.
+            Cuenta c = new Cuenta(); //Para asignarle los valores de los campos
+            Cuenta padre = new Cuenta(); //Para asignar la cuenta padre de la base.
+            Consulta nueva = new Consulta(); //Instanciar la consulta
+
+            //Se generan los valores de debe, haber y saldo en el formato correcto.
+            double debe = Double.parseDouble(tfSumaDebe.getText());
+            double haber = Double.parseDouble(tfSumaHaber.getText());
+            double saldo = debe - haber;
+            saldo = Math.abs(saldo);
+            BigDecimal BDdebe = new BigDecimal(debe);
+            BigDecimal BDhaber = new BigDecimal(haber);
+            BigDecimal BDsaldo = new BigDecimal(saldo);
+            nueva.inicializar();  //Se crean las funciones iniciales de la consulta. 
+            //Variable nueva, lista para usarse.
+
+            TipoCuenta tipo = new TipoCuenta(); //Se necesita para asignar el tipo de cuenta.
+
+            //El tipo depende del tamanio del codigo , asi que la asginacion debe hacerse asi.
+            //getById es la primer consulta, devuelve nada mas un objeto sin tipo de clase. Hay que hacer un casteo a (TipoCuenta)
+            if (Integer.parseInt(tfIndice.getText()) < 10) {
+                tipo = (TipoCuenta) nueva.getByID("TipoCuenta", "1");
+            } else if (Integer.parseInt(tfIndice.getText()) < 100) {
+                tipo = (TipoCuenta) nueva.getByID("TipoCuenta", "2");
+            } else if (Integer.parseInt(tfIndice.getText()) < 1000) {
+                tipo = (TipoCuenta) nueva.getByID("TipoCuenta", "3");
+            } else if (Integer.parseInt(tfIndice.getText()) < 10000) {
+                tipo = (TipoCuenta) nueva.getByID("TipoCuenta", "4");
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(AddCuenta.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(this,"Erorr en la base de datos.");
+            //Se asignan a la cuenta todos los valores.
+            c.setIdCuenta(Integer.parseInt(tfIndice.getText()));
+            c.setCodigo(Integer.parseInt(tfIndice.getText()));
+            c.setNombreCuenta(tfNombreCuenta.getText());
+            c.setSumaDebe(BDdebe);
+            c.setSumaHaber(BDhaber);
+            c.setSaldo(BDsaldo);
+            c.setTipoCuenta(tipo);
+            c.setAjustable(cbAjustableCuenta.isSelected());
+            c.setOperable(cbOperable.isSelected());
+            //No deberia venir un valor incorrecto, por si acaso se impide un NullPointerException.
+            if (!tfCodigoCuenta.getText().isEmpty()) {
+                padre = (Cuenta) nueva.getByID("Cuenta", tfCodigoCuenta.getText());
+                c.setCuenta(padre);
+            }
+            //Se hace la consulta para guardar.
+            nueva.guardar(c);
+            //Se cierra la conexion.
+            nueva.cerrarConexion();
+            //Se actualiza la lista del catalogo.
+            lista.add(c);
+            //Se remueve el elemento anterior del catalogo.
+            this.getDesktopPane().remove(1); 
+            //Se crea un nuevo catalogo con la nueva lista de cuentas.
+            Catalogo abrir = new Catalogo(this.lista);
+            abrir.setLocation(centrar(abrir));
+            this.getDesktopPane().add(abrir);
+            abrir.show();
+
+            //Se cierra este formulario.
+            this.dispose();
+
         }
+
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    public Point centrar(JInternalFrame frame) {
+        Dimension desktopSize = this.getDesktopPane().getSize();
+        Dimension jInternalFrameSize = frame.getSize();
+        Point punto = new Point((desktopSize.width - jInternalFrameSize.width) / 2, (desktopSize.height - jInternalFrameSize.height) / 2);
+
+        return punto;
+    }
+
+    private void tfTipoCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfTipoCuentaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfTipoCuentaActionPerformed
+
+    private void tfIndiceKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfIndiceKeyReleased
+
+    }//GEN-LAST:event_tfIndiceKeyReleased
+
+    private void tfIndiceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfIndiceKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfIndiceKeyTyped
+
+    private void tfNombreCuentaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNombreCuentaKeyReleased
+
+    }//GEN-LAST:event_tfNombreCuentaKeyReleased
+
+    private void tfNombreCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNombreCuentaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfNombreCuentaActionPerformed
+
+    private void tfNombreCuentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNombreCuentaKeyTyped
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_tfNombreCuentaKeyTyped
+
+    private void tfCodigoCuentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCodigoCuentaKeyTyped
+
+    }//GEN-LAST:event_tfCodigoCuentaKeyTyped
+
+    private void tfCodigoCuentaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCodigoCuentaKeyReleased
+        if (Character.isDigit(evt.getKeyChar()) || evt.getKeyChar() == '\b') {
+            try {
+
+                //Si el codigo de cuenta padre esta vacio
+                if (tfCodigoCuenta.getText().isEmpty()) {
+                    tfTipoCuenta.setText("");
+                    //De lo contrario se procede a validar el contenido del codigo de cuenta padre.
+                } else {
+                    //Se guarda el ultimo codigo que fue digitado para posterior uso.
+                    UltimaCuenta = tfCodigoCuenta.getText();
+                    //Si el codigo padre es 0 o pertenece al ultimo sub arreglo (superior o igual a 100000) se marca como fuera de rango.
+                    if (Integer.parseInt(tfCodigoCuenta.getText()) == 0 || Integer.parseInt(tfCodigoCuenta.getText()) >= 100000) {
+                        errorCodigoPadre.setText("Indice fuera de rango.");
+                        tfIndice.setText("");
+                        error = true;
+                    } else {
+                        errorCodigoPadre.setText("");
+                        error = false;
+
+                        int counter = 1; //Para contar los codigos en la subcuenta para hacer la sugerencia de indice disponible.
+                        int cuentaPadre = 0; //Para armar el codigo sugerido de la nueva cuenta.
+                        boolean existeCuenta = false; //Si se encuentra la cuenta se vuelve true. 
+
+                        //Si el codigo no devuelve un valor nulo se lee el codigo que ha escrito el user en la variable indice.
+                        if (tfCodigoCuenta.getText() != null) {
+                            int indice = Integer.parseInt(tfCodigoCuenta.getText());
+                            if (indice < 10) { //Si el indice es menor que 10, se buscan datos en el arreglo sub1.
+                                for (Cuenta x : sub1) { //se recorre el arreglo devolviendo cada valor en el objeto x de tipo Cuenta y
+                                    if (x.getIdCuenta() == indice) { // si el id es igual al indice escrito, se ha encontrado el codigo de la cuenta que puso el usuario y
+                                        tfTipoCuenta.setText(x.getNombreCuenta()); //Se muestra el nombre de la cuenta en el textfield tfTipoCuenta
+                                        cuentaPadre = x.getCodigo(); //Ademas se guarda el codigo de la cuenta para posterior uso.
+                                        existeCuenta = true; //Indicamos que la cuenta fue encontrada, para el texto de error.
+                                        for (Cuenta y : sub2) { //Y se busca en el siguiente arreglo, el codigo de subcuenta que este disponible.
+                                            if (indice == y.getCuenta().getCodigo()) {
+                                                counter++; //Se cuenta el numero de elementos con el Id de la cuenta Padre. 
+                                                //ej: Si ya hay 4 subcuentas,  counter termina con valor de 5.
+                                            }
+                                        }
+                                    }
+
+                                }
+                                //Si el indice no era menor que 10, se evalua si es menor que 100 y se repite
+                                //el proceso con el arreglo sub2, y sucesivamente hasta el penultimo arreglo.
+                                //El ultimo arreglo solo se recorre para revisar el indice disponible, 
+                                //pues las cuentas de 6 digitos no pueden tener cuentas hijas. 
+                            } else if (indice < 100) {
+                                for (Cuenta x : sub2) {
+                                    if (x.getIdCuenta() == indice) {
+                                        tfTipoCuenta.setText(x.getNombreCuenta());
+                                        cuentaPadre = x.getCodigo();
+                                        existeCuenta = true;
+                                        for (Cuenta y : sub3) {
+                                            if (indice == y.getCuenta().getCodigo()) {
+                                                counter++;
+                                            }
+                                        }
+                                    }
+                                }
+                            } else if (indice < 1000) {
+                                for (Cuenta x : sub3) {
+                                    if (x.getIdCuenta() == indice) {
+                                        tfTipoCuenta.setText(x.getNombreCuenta());
+                                        cuentaPadre = x.getCodigo();
+                                        existeCuenta = true;
+                                        for (Cuenta y : sub4) {
+                                            if (indice == y.getCuenta().getCodigo()) {
+                                                counter++;
+                                            }
+                                        }
+                                    }
+                                }
+                            } else if (indice < 10000) {
+                                for (Cuenta x : sub4) {
+                                    if (x.getIdCuenta() == indice) {
+                                        tfTipoCuenta.setText(x.getNombreCuenta());
+                                        cuentaPadre = x.getCodigo();
+                                        existeCuenta = true;
+                                        for (Cuenta y : sub5) {
+                                            if (indice == y.getCuenta().getCodigo()) {
+                                                counter++;
+                                            }
+                                        }
+                                    }
+                                }
+                            } else if (indice < 100000) {
+                                for (Cuenta x : sub5) {
+                                    if (x.getIdCuenta() == indice) {
+                                        tfTipoCuenta.setText(x.getNombreCuenta());
+                                        cuentaPadre = x.getCodigo();
+                                        existeCuenta = true;
+                                        for (Cuenta y : sub6) {
+                                            if (indice == y.getCuenta().getCodigo()) {
+                                                counter++;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (!existeCuenta) { //Si la cuenta no fue encontrada.
+                            errorCodigoPadre.setText("No existe esta cuenta raiz."); //Se informa al usuario con un error.
+                            tfIndice.setText(""); //Se elimina la sugerencia de indice disponible.
+                            error = true; //Se marca que ha ocurrido un error.
+                        } else {
+                            error = false;
+                        }
+
+                        //Despues se revisa que ningun mensaje de error haya sido mostrado
+                        //Para sugerir el codigo de subcuenta disponible.
+                        if (!error) {
+                            if (counter == 1) { //Si el contador termina con el valor inicial. 
+                                //Implica que ninguna subcuenta ha sido creada. 
+                                tfIndice.setText(UltimaCuenta + "" + counter + ""); //Se sugiere el indice de la cuenta padre +1
+                            } else { //De lo contrario se sugiere el codigo correlativo que corresponde
+                                tfIndice.setText(cuentaPadre + "" + counter + "");
+                            }
+
+                        }
+                    }
+                }
+            } catch (NumberFormatException e) {
+                //Excepcion si el Integer.ParseInt no puede convertir el dato.
+                //Implica que no se escribio un numero.
+                errorCodigoPadre.setText("Escriba unicamente numeros.");
+                tfCodigoCuenta.setText("");
+
+            }
+        } else if (evt.getKeyChar() != '\b') {
+            errorCodigoPadre.setText("");
+            tfCodigoCuenta.setText("");
+            Toolkit.getDefaultToolkit().beep();
+        }
+
+    }//GEN-LAST:event_tfCodigoCuentaKeyReleased
+
+    private void tfCodigoCuentaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCodigoCuentaKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfCodigoCuentaKeyPressed
+
+    private void tfCodigoCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfCodigoCuentaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfCodigoCuentaActionPerformed
+
+    private void tfCodigoCuentaInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_tfCodigoCuentaInputMethodTextChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfCodigoCuentaInputMethodTextChanged
+
+    private void tfSumaDebeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSumaDebeKeyReleased
+        // TODO add your handling code here:
+        try {
+            //Valor no tiene mas utilidad que servir como bandera para el catch.
+            double valor = Double.parseDouble(tfSumaDebe.getText());
+            errorGeneral.setText("");
+        } catch (NumberFormatException e) {
+            errorGeneral.setText("Ingrese unicamente numeros.");
+            tfSumaDebe.setText("");
+            error = true;
+        }
+        verificarSaldo(); //Cada tecla pulsada verifica el valor del saldo.
+    }//GEN-LAST:event_tfSumaDebeKeyReleased
+
+    private void tfSumaHaberKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSumaHaberKeyReleased
+        // TODO add your handling code here:
+        try {
+            double valor = Double.parseDouble(tfSumaHaber.getText());
+            errorGeneral.setText("");
+        } catch (NumberFormatException e) {
+            errorGeneral.setText("Ingrese unicamente numeros.");
+            tfSumaHaber.setText("");
+            error = true;
+        }
+
+        verificarSaldo();
+    }//GEN-LAST:event_tfSumaHaberKeyReleased
+
+    private void tfSaldoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSaldoKeyReleased
+        // TODO add your handling code here:
+
+
+    }//GEN-LAST:event_tfSaldoKeyReleased
+
+    private void cbOperableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbOperableActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbOperableActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox cbAjustableCuenta;
-    private javax.swing.JComboBox<String> cbTipoCuenta;
+    private javax.swing.JCheckBox cbOperable;
+    private javax.swing.JLabel errorCodigoPadre;
+    private javax.swing.JLabel errorGeneral;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -180,10 +663,14 @@ public class AddCuenta extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel lbTipoSaldo;
     private javax.swing.JTextField tfCodigoCuenta;
+    private javax.swing.JTextField tfIndice;
     private javax.swing.JTextField tfNombreCuenta;
     private javax.swing.JTextField tfSaldo;
     private javax.swing.JTextField tfSumaDebe;
     private javax.swing.JTextField tfSumaHaber;
+    private javax.swing.JTextField tfTipoCuenta;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,18 +5,22 @@
  */
 package frm;
 
+import db.Consulta;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import modelo.User;
+import modelo.Cuenta;
+import modelo.Usuario;
 
 /**
  *
  * @author jaquino
  */
 public class Principal extends javax.swing.JFrame {
-    User user;
+    Usuario user;
     public Point centrar(JInternalFrame frame){
         Dimension desktopSize = desktop.getSize();
         Dimension jInternalFrameSize = frame.getSize();
@@ -30,8 +34,18 @@ public class Principal extends javax.swing.JFrame {
     public Principal() {
         this.user = user;
         initComponents();
+        consultaInicial_Cuentas();
     }
-
+    
+    List<Cuenta> lista = new ArrayList<>();
+    
+    public void consultaInicial_Cuentas(){
+        Consulta nueva = new Consulta();
+        nueva.inicializar();
+        lista = nueva.obtener("Cuenta");
+        nueva.cerrarConexion();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -153,9 +167,15 @@ public class Principal extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         login();
     }//GEN-LAST:event_formWindowOpened
-
+    
+      public Catalogo abrir;
+      
+      public Catalogo getCatalogo(){
+      return this.abrir;
+      }
+    
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        Catalogo abrir = new Catalogo();
+        abrir = new Catalogo(lista);
         abrir.setLocation(centrar(abrir));
         desktop.add(abrir);
         abrir.show();
@@ -166,7 +186,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuCuentasActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        AddCuenta abrir = new AddCuenta();
+        AddCuenta abrir = new AddCuenta(lista);
         abrir.setLocation(centrar(abrir));
         desktop.add(abrir);
         abrir.show();

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-15-2017 11:15:47 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="modelo.PeriodoContable" table="periodo_contable" schema="public" optimistic-lock="version">
+        <id name="idPeriodo" type="int">
+            <column name="id_periodo" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="estadoPeriodo" class="modelo.EstadoPeriodo" fetch="select">
+            <column name="id_estado" not-null="true" />
+        </many-to-one>
+        <property name="anioPeriodo" type="int">
+            <column name="anio_periodo" not-null="true" />
+        </property>
+        <property name="fechaInicio" type="date">
+            <column name="fecha_inicio" length="13" not-null="true" />
+        </property>
+        <property name="fechaFin" type="date">
+            <column name="fecha_fin" length="13" not-null="true" />
+        </property>
+        <set name="partidas" table="partida" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_periodo" not-null="true" />
+            </key>
+            <one-to-many class="modelo.Partida" />
+        </set>
+    </class>
+</hibernate-mapping>

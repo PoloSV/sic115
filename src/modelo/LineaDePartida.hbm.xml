@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-15-2017 11:15:47 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="modelo.LineaDePartida" table="linea_de_partida" schema="public" optimistic-lock="version">
+        <id name="idLinea" type="int">
+            <column name="id_linea" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="cuenta" class="modelo.Cuenta" fetch="select">
+            <column name="id_cuenta" not-null="true" />
+        </many-to-one>
+        <many-to-one name="partida" class="modelo.Partida" fetch="select">
+            <column name="id_partida" not-null="true" />
+        </many-to-one>
+        <property name="debe" type="big_decimal">
+            <column name="debe" precision="10" />
+        </property>
+        <property name="haber" type="big_decimal">
+            <column name="haber" precision="10" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-15-2017 11:15:47 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="modelo.Cuenta" table="cuenta" schema="public" optimistic-lock="version">
+        <id name="idCuenta" type="int">
+            <column name="id_cuenta" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="cuenta" class="modelo.Cuenta" fetch="select">
+            <column name="id_cuenta_padre" />
+        </many-to-one>
+        <many-to-one name="tipoCuenta" class="modelo.TipoCuenta" fetch="select">
+            <column name="id_tipo" not-null="true" />
+        </many-to-one>
+        <property name="codigo" type="int">
+            <column name="codigo" not-null="true" />
+        </property>
+        <property name="nombreCuenta" type="string">
+            <column name="nombre_cuenta" length="75" not-null="true" />
+        </property>
+        <property name="sumaDebe" type="big_decimal">
+            <column name="suma_debe" precision="10" />
+        </property>
+        <property name="sumaHaber" type="big_decimal">
+            <column name="suma_haber" precision="10" />
+        </property>
+        <property name="saldo" type="big_decimal">
+            <column name="saldo" precision="10" />
+        </property>
+        <property name="ajustable" type="java.lang.Boolean">
+            <column name="ajustable" />
+        </property>
+        <property name="operable" type="java.lang.Boolean">
+            <column name="operable" />
+        </property>
+        <set name="cuentas" table="cuenta" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_cuenta_padre" />
+            </key>
+            <one-to-many class="modelo.Cuenta" />
+        </set>
+        <set name="lineaDePartidas" table="linea_de_partida" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_cuenta" not-null="true" />
+            </key>
+            <one-to-many class="modelo.LineaDePartida" />
+        </set>
+    </class>
+</hibernate-mapping>

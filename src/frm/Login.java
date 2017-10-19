@@ -9,7 +9,7 @@ import db.UserDB;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import modelo.User;
+import modelo.Usuario;
 
 /**
  *

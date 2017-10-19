@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-15-2017 11:15:47 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="modelo.EstadoPeriodo" table="estado_periodo" schema="public" optimistic-lock="version">
+        <id name="idEstado" type="int">
+            <column name="id_estado" />
+            <generator class="assigned" />
+        </id>
+        <property name="nombreEstado" type="string">
+            <column name="nombre_estado" length="25" not-null="true" />
+        </property>
+        <set name="periodoContables" table="periodo_contable" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_estado" not-null="true" />
+            </key>
+            <one-to-many class="modelo.PeriodoContable" />
+        </set>
+    </class>
+</hibernate-mapping>
