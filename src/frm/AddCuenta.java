@@ -388,7 +388,7 @@ public class AddCuenta extends javax.swing.JInternalFrame {
                 tipo = (TipoCuenta) nueva.getByID("TipoCuenta", "2");
             } else if (Integer.parseInt(tfIndice.getText()) < 1000) {
                 tipo = (TipoCuenta) nueva.getByID("TipoCuenta", "3");
-            } else if (Integer.parseInt(tfIndice.getText()) < 10000) {
+            } else if (Integer.parseInt(tfIndice.getText()) < 1000000) {
                 tipo = (TipoCuenta) nueva.getByID("TipoCuenta", "4");
             }
             //Se asignan a la cuenta todos los valores.
@@ -413,7 +413,11 @@ public class AddCuenta extends javax.swing.JInternalFrame {
             //Se actualiza la lista del catalogo.
             lista.add(c);
             //Se remueve el elemento anterior del catalogo.
+           try{
             this.getDesktopPane().remove(1); 
+           }catch (ArrayIndexOutOfBoundsException e){
+           
+           }
             //Se crea un nuevo catalogo con la nueva lista de cuentas.
             Catalogo abrir = new Catalogo(this.lista);
             abrir.setLocation(centrar(abrir));
@@ -618,6 +622,7 @@ public class AddCuenta extends javax.swing.JInternalFrame {
             //Valor no tiene mas utilidad que servir como bandera para el catch.
             double valor = Double.parseDouble(tfSumaDebe.getText());
             errorGeneral.setText("");
+            error = false;
         } catch (NumberFormatException e) {
             errorGeneral.setText("Ingrese unicamente numeros.");
             tfSumaDebe.setText("");
@@ -631,6 +636,7 @@ public class AddCuenta extends javax.swing.JInternalFrame {
         try {
             double valor = Double.parseDouble(tfSumaHaber.getText());
             errorGeneral.setText("");
+            error=false;
         } catch (NumberFormatException e) {
             errorGeneral.setText("Ingrese unicamente numeros.");
             tfSumaHaber.setText("");

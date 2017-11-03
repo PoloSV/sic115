@@ -193,7 +193,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        Partida abrir = new Partida();
+        Partida abrir = new Partida(this.lista);
         abrir.setLocation(centrar(abrir));
         desktop.add(abrir);
         abrir.show();
