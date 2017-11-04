@@ -40,12 +40,16 @@ made subject to such option by the copyright holder.
 Contributor(s):
 -->
 <hibernate-reverse-engineering>
-  <schema-selection match-catalog="postgres"/>
-  <table-filter match-name="cuenta"/>
-  <table-filter match-name="linea_de_partida"/>
-  <table-filter match-name="estado_periodo"/>
-  <table-filter match-name="partida"/>
+  <schema-selection match-catalog="sic"/>
   <table-filter match-name="periodo_contable"/>
+  <table-filter match-name="estado_periodo"/>
   <table-filter match-name="tipo_cuenta"/>
+  <table-filter match-name="sesiones"/>
+  <table-filter match-name="cuenta"/>
+  <table-filter match-name="empleados"/>
   <table-filter match-name="usuario"/>
+  <table-filter match-name="permisos"/>
+  <table-filter match-name="linea_de_partida"/>
+  <table-filter match-name="partida"/>
+  <table-filter match-name="roles"/>
 </hibernate-reverse-engineering>

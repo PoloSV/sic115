@@ -1,5 +1,5 @@
 package modelo;
-// Generated 10-15-2017 11:15:46 AM by Hibernate Tools 4.3.1
+// Generated 11-03-2017 09:45:10 PM by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;
@@ -12,26 +12,31 @@ public class Usuario  implements java.io.Serializable {
 
 
      private int idUsuario;
+     private Empleados empleados;
+     private Roles roles;
+     private Sesiones sesiones;
      private String username;
      private String password;
-     private String nombreUsuario;
+     private Boolean active;
      private Set partidas = new HashSet(0);
 
     public Usuario() {
     }
 
 	
-    public Usuario(int idUsuario, String username, String password, String nombreUsuario) {
+    public Usuario(int idUsuario, String username, String password) {
         this.idUsuario = idUsuario;
         this.username = username;
         this.password = password;
-        this.nombreUsuario = nombreUsuario;
     }
-    public Usuario(int idUsuario, String username, String password, String nombreUsuario, Set partidas) {
+    public Usuario(int idUsuario, Empleados empleados, Roles roles, Sesiones sesiones, String username, String password, Boolean active, Set partidas) {
        this.idUsuario = idUsuario;
+       this.empleados = empleados;
+       this.roles = roles;
+       this.sesiones = sesiones;
        this.username = username;
        this.password = password;
-       this.nombreUsuario = nombreUsuario;
+       this.active = active;
        this.partidas = partidas;
     }
    
@@ -41,6 +46,27 @@ public class Usuario  implements java.io.Serializable {
     
     public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
+    }
+    public Empleados getEmpleados() {
+        return this.empleados;
+    }
+    
+    public void setEmpleados(Empleados empleados) {
+        this.empleados = empleados;
+    }
+    public Roles getRoles() {
+        return this.roles;
+    }
+    
+    public void setRoles(Roles roles) {
+        this.roles = roles;
+    }
+    public Sesiones getSesiones() {
+        return this.sesiones;
+    }
+    
+    public void setSesiones(Sesiones sesiones) {
+        this.sesiones = sesiones;
     }
     public String getUsername() {
         return this.username;
@@ -56,12 +82,12 @@ public class Usuario  implements java.io.Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-    public String getNombreUsuario() {
-        return this.nombreUsuario;
+    public Boolean getActive() {
+        return this.active;
     }
     
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
     public Set getPartidas() {
         return this.partidas;

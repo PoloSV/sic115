@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 11-03-2017 09:45:10 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="modelo.Permisos" table="permisos" schema="public" optimistic-lock="version">
+        <id name="idPermiso" type="int">
+            <column name="id_permiso" />
+            <generator class="assigned" />
+        </id>
+        <property name="verCatalogo" type="boolean">
+            <column name="ver_catalogo" not-null="true" />
+        </property>
+        <property name="ingresarPartida" type="boolean">
+            <column name="ingresar_partida" not-null="true" />
+        </property>
+        <property name="editarPartida" type="boolean">
+            <column name="editar_partida" not-null="true" />
+        </property>
+        <property name="agregarCuenta" type="boolean">
+            <column name="agregar_cuenta" not-null="true" />
+        </property>
+        <property name="editarCuenta" type="boolean">
+            <column name="editar_cuenta" not-null="true" />
+        </property>
+        <property name="adminUsuarios" type="boolean">
+            <column name="admin_usuarios" not-null="true" />
+        </property>
+        <set name="roleses" table="roles" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_permiso" />
+            </key>
+            <one-to-many class="modelo.Roles" />
+        </set>
+    </class>
+</hibernate-mapping>
