@@ -14,9 +14,6 @@
         <many-to-one name="roles" class="modelo.Roles" fetch="select">
             <column name="id_rol" />
         </many-to-one>
-        <many-to-one name="sesiones" class="modelo.Sesiones" fetch="select">
-            <column name="id_sesion" />
-        </many-to-one>
         <property name="username" type="string">
             <column name="username" length="25" not-null="true" unique="true" />
         </property>
@@ -26,6 +23,12 @@
         <property name="active" type="java.lang.Boolean">
             <column name="active" />
         </property>
+        <set name="sesioneses" table="sesiones" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_usuario" />
+            </key>
+            <one-to-many class="modelo.Sesiones" />
+        </set>
         <set name="partidas" table="partida" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="id_usuario" not-null="true" />

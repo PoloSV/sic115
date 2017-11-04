@@ -14,10 +14,10 @@ public class Usuario  implements java.io.Serializable {
      private int idUsuario;
      private Empleados empleados;
      private Roles roles;
-     private Sesiones sesiones;
      private String username;
      private String password;
      private Boolean active;
+     private Set sesioneses = new HashSet(0);
      private Set partidas = new HashSet(0);
 
     public Usuario() {
@@ -29,14 +29,14 @@ public class Usuario  implements java.io.Serializable {
         this.username = username;
         this.password = password;
     }
-    public Usuario(int idUsuario, Empleados empleados, Roles roles, Sesiones sesiones, String username, String password, Boolean active, Set partidas) {
+    public Usuario(int idUsuario, Empleados empleados, Roles roles, String username, String password, Boolean active, Set sesioneses, Set partidas) {
        this.idUsuario = idUsuario;
        this.empleados = empleados;
        this.roles = roles;
-       this.sesiones = sesiones;
        this.username = username;
        this.password = password;
        this.active = active;
+       this.sesioneses = sesioneses;
        this.partidas = partidas;
     }
    
@@ -61,13 +61,6 @@ public class Usuario  implements java.io.Serializable {
     public void setRoles(Roles roles) {
         this.roles = roles;
     }
-    public Sesiones getSesiones() {
-        return this.sesiones;
-    }
-    
-    public void setSesiones(Sesiones sesiones) {
-        this.sesiones = sesiones;
-    }
     public String getUsername() {
         return this.username;
     }
@@ -88,6 +81,13 @@ public class Usuario  implements java.io.Serializable {
     
     public void setActive(Boolean active) {
         this.active = active;
+    }
+    public Set getSesioneses() {
+        return this.sesioneses;
+    }
+    
+    public void setSesioneses(Set sesioneses) {
+        this.sesioneses = sesioneses;
     }
     public Set getPartidas() {
         return this.partidas;

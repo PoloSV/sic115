@@ -9,10 +9,12 @@ import db.Consulta;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import modelo.Cuenta;
+import modelo.Sesiones;
 import modelo.Usuario;
 
 /**
@@ -20,7 +22,7 @@ import modelo.Usuario;
  * @author jaquino
  */
 public class Principal extends javax.swing.JFrame {
-    Usuario user;
+    public static Sesiones sesion;
     public Point centrar(JInternalFrame frame){
         Dimension desktopSize = desktop.getSize();
         Dimension jInternalFrameSize = frame.getSize();
@@ -215,7 +217,14 @@ public class Principal extends javax.swing.JFrame {
         for(JInternalFrame frame : desktop.getAllFrames())
             frame.dispose();
         jMenuCuentas.setEnabled(false);
-        user = null;
+        sesion.setActiva(false);
+        sesion.setFin(new Date());
+        
+        Consulta c = new Consulta();
+        c.inicializar();
+        c.actualizar(sesion);
+        c.cerrarConexion();
+        sesion = null;
     }
     /**
      * @param args the command line arguments

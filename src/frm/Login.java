@@ -12,6 +12,7 @@ import sesion.UserEncryp;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import modelo.Sesiones;
 import modelo.Usuario;
 
 /**
@@ -46,6 +47,7 @@ public class Login extends javax.swing.JInternalFrame {
 
         jLabel1.setText("Usuario:");
 
+        txtUsername.setText("contador");
         txtUsername.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtUsernameActionPerformed(evt);
@@ -53,6 +55,8 @@ public class Login extends javax.swing.JInternalFrame {
         });
 
         jLabel2.setText("Contraseña:");
+
+        txtPassword.setText("123");
 
         jButton1.setText("Iniciar sesión");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -99,15 +103,16 @@ public class Login extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Usuario usuario = null;
+        Sesiones ses = null;
         try {
-            usuario = sesion.UserValidator.verificarUsuario(txtUsername.getText(), txtPassword.getText());
+            ses = sesion.UserValidator.verificarUsuario(txtUsername.getText(), txtPassword.getText());
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if(usuario!=null){
+        if(ses!=null){
             jMenuItem1.setText("Cerrar sesión");
             jMenuCuentas.setEnabled(true);
+            Principal.sesion = ses;
             this.dispose();
         }
         else
