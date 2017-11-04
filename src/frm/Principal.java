@@ -32,7 +32,6 @@ public class Principal extends javax.swing.JFrame {
      * Creates new form Main
      */
     public Principal() {
-        this.user = user;
         initComponents();
         consultaInicial_Cuentas();
     }
@@ -58,7 +57,7 @@ public class Principal extends javax.swing.JFrame {
         desktop = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        menuArchivo = new javax.swing.JMenuItem();
         jMenuCuentas = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -89,13 +88,13 @@ public class Principal extends javax.swing.JFrame {
 
         jMenu1.setText("Archivo");
 
-        jMenuItem1.setText("Iniciar sesión");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        menuArchivo.setText("Iniciar sesión");
+        menuArchivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                menuArchivoActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jMenu1.add(menuArchivo);
 
         jMenuBar1.add(jMenu1);
 
@@ -157,12 +156,12 @@ public class Principal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void menuArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuArchivoActionPerformed
         if(jMenuCuentas.isEnabled())
             logout();
         else
             login();
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_menuArchivoActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         login();
@@ -206,13 +205,13 @@ public class Principal extends javax.swing.JFrame {
         abrir.show();
     }//GEN-LAST:event_jMenuItem5ActionPerformed
     private void login(){
-        Login abrir = new Login(jMenuItem1,jMenuCuentas);
+        Login abrir = new Login(menuArchivo,jMenuCuentas);
         abrir.setLocation(centrar(abrir));
         desktop.add(abrir);
         abrir.show();
     }
     private void logout(){
-        jMenuItem1.setText("Iniciar sesión...");
+        menuArchivo.setText("Iniciar sesión...");
         for(JInternalFrame frame : desktop.getAllFrames())
             frame.dispose();
         jMenuCuentas.setEnabled(false);
@@ -264,10 +263,10 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuCuentas;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem menuArchivo;
     // End of variables declaration//GEN-END:variables
 }

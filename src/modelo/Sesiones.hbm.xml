@@ -11,6 +11,15 @@
         <property name="keySesion" type="string">
             <column name="key_sesion" length="50" not-null="true" />
         </property>
+        <property name="activa" type="java.lang.Boolean">
+            <column name="activa" />
+        </property>
+        <property name="inicio" type="date">
+            <column name="inicio" length="13" />
+        </property>
+        <property name="fin" type="date">
+            <column name="fin" length="13" />
+        </property>
         <set name="usuarios" table="usuario" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="id_sesion" />

@@ -2,6 +2,7 @@ package modelo;
 // Generated 11-03-2017 09:45:10 PM by Hibernate Tools 4.3.1
 
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,6 +14,9 @@ public class Sesiones  implements java.io.Serializable {
 
      private int idSesion;
      private String keySesion;
+     private Boolean activa;
+     private Date inicio;
+     private Date fin;
      private Set usuarios = new HashSet(0);
 
     public Sesiones() {
@@ -23,9 +27,12 @@ public class Sesiones  implements java.io.Serializable {
         this.idSesion = idSesion;
         this.keySesion = keySesion;
     }
-    public Sesiones(int idSesion, String keySesion, Set usuarios) {
+    public Sesiones(int idSesion, String keySesion, Boolean activa, Date inicio, Date fin, Set usuarios) {
        this.idSesion = idSesion;
        this.keySesion = keySesion;
+       this.activa = activa;
+       this.inicio = inicio;
+       this.fin = fin;
        this.usuarios = usuarios;
     }
    
@@ -42,6 +49,27 @@ public class Sesiones  implements java.io.Serializable {
     
     public void setKeySesion(String keySesion) {
         this.keySesion = keySesion;
+    }
+    public Boolean getActiva() {
+        return this.activa;
+    }
+    
+    public void setActiva(Boolean activa) {
+        this.activa = activa;
+    }
+    public Date getInicio() {
+        return this.inicio;
+    }
+    
+    public void setInicio(Date inicio) {
+        this.inicio = inicio;
+    }
+    public Date getFin() {
+        return this.fin;
+    }
+    
+    public void setFin(Date fin) {
+        this.fin = fin;
     }
     public Set getUsuarios() {
         return this.usuarios;
