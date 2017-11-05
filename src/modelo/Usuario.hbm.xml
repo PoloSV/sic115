@@ -11,7 +11,7 @@
         <many-to-one name="empleados" class="modelo.Empleados" fetch="select">
             <column name="id_empleado" />
         </many-to-one>
-        <many-to-one name="roles" class="modelo.Roles" fetch="select">
+        <many-to-one name="roles" class="modelo.Roles" fetch="select" lazy="false">
             <column name="id_rol" />
         </many-to-one>
         <property name="username" type="string">

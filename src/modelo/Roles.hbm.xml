@@ -8,7 +8,7 @@
             <column name="id_rol" />
             <generator class="assigned" />
         </id>
-        <many-to-one name="permisos" class="modelo.Permisos" fetch="select">
+        <many-to-one name="permisos" class="modelo.Permisos" fetch="select" lazy="false">
             <column name="id_permiso" />
         </many-to-one>
         <property name="nombreRol" type="string">

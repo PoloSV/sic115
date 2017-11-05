@@ -1,9 +1,9 @@
 package sesion;
 import modelo.Usuario;
 import db.Consulta;
+import frm.Principal;
 import modelo.Sesiones;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,8 +13,15 @@ import java.util.List;
  */
 public class UserValidator {
     
+    /**
+     * Verificación de Usuarios
+     * @param username El nombre de usuario a loguear
+     * @param password La contraseña del usuario
+     * @return Una instancia de una Sesion en caso de tener exito o null
+     * @throws NoSuchAlgorithmException 
+     */
     public static Sesiones verificarUsuario(String username, String password) throws NoSuchAlgorithmException{
-        List<Usuario> usuario = new ArrayList<>();
+        List<Usuario> usuario;
         
         Consulta consulta = new Consulta();
         consulta.inicializar();
@@ -24,10 +31,12 @@ public class UserValidator {
         
         if(usuario.size() == 1){
             Usuario u = usuario.get(0);
-            Sesiones s = crearSesion(u);
-            consulta.guardar(s);
-            consulta.cerrarConexion();
-            return s;
+            if(u.getActive()){
+                Sesiones s = crearSesion(u);
+                consulta.guardar(s);
+                consulta.cerrarConexion();
+                return s;
+            }            
         }
         consulta.cerrarConexion();
         return null;
@@ -46,6 +55,18 @@ public class UserValidator {
         sesion.setActiva(true);
         sesion.setKeySesion(UserEncryp.md5Hash(hoy.toString()));
         return sesion;
+    }
+    
+    /**
+     * Usar siempre para mantener actualizado el estado de la sesion
+     * @return boolean Es valida o no lo es la sesion actual
+     */
+    public static boolean isSesionValida(){
+        Consulta c = new Consulta();
+        c.inicializar();
+        c.refrescar(Principal.sesion);
+        c.cerrarConexion();
+        return Principal.sesion.getActiva() && Principal.sesion.getUsuario().getActive();
     }
     
 }

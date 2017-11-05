@@ -5,6 +5,7 @@
  */
 package frm;
 
+import java.awt.Component;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,6 +13,7 @@ import sesion.UserEncryp;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import modelo.Permisos;
 import modelo.Sesiones;
 import modelo.Usuario;
 
@@ -39,7 +41,7 @@ public class Login extends javax.swing.JInternalFrame {
         txtUsername = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txtPassword = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
+        btnLogin = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Login");
@@ -58,10 +60,10 @@ public class Login extends javax.swing.JInternalFrame {
 
         txtPassword.setText("123");
 
-        jButton1.setText("Iniciar sesión");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnLogin.setText("Iniciar sesión");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnLoginActionPerformed(evt);
             }
         });
 
@@ -72,7 +74,7 @@ public class Login extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
+                    .addComponent(btnLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
@@ -95,14 +97,14 @@ public class Login extends javax.swing.JInternalFrame {
                     .addComponent(jLabel2)
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+                .addComponent(btnLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         Sesiones ses = null;
         try {
             ses = sesion.UserValidator.verificarUsuario(txtUsername.getText(), txtPassword.getText());
@@ -113,19 +115,38 @@ public class Login extends javax.swing.JInternalFrame {
             jMenuItem1.setText("Cerrar sesión");
             jMenuCuentas.setEnabled(true);
             Principal.sesion = ses;
+            habilitarBotones();
             this.dispose();
         }
         else
-            JOptionPane.showMessageDialog(this,"Contraseña incorrecta.");
-    }//GEN-LAST:event_jButton1ActionPerformed
+            JOptionPane.showMessageDialog(this,"Contraseña incorrecta. Pongase en contacto con el administrador");
+    }//GEN-LAST:event_btnLoginActionPerformed
 
+    /**
+     * Habilitar botones de los menus luego de la autenticación de usuario
+     */
+    private  void habilitarBotones(){
+        Permisos permisos = Principal.sesion.getUsuario().getRoles().getPermisos();
+        
+        //Habilitar botones del menu de CUENTAS
+        int itemsPrimerMenu = jMenuCuentas.getItemCount();
+        for(int i=0;i<itemsPrimerMenu;i++){
+            JMenuItem aux = jMenuCuentas.getItem(i);
+            switch(aux.getText()){
+                case "Catalogo de Cuentas": aux.setEnabled(permisos.isVerCatalogo()); break;
+                case "Agregar Cuenta": aux.setEnabled(permisos.isAgregarCuenta()); break;
+                case "Partidas": aux.setEnabled(permisos.isIngresarPartida()); break;
+            }
+        }
+        
+    }
     private void txtUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsernameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUsernameActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnLogin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPasswordField txtPassword;

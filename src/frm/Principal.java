@@ -16,6 +16,7 @@ import javax.swing.JInternalFrame;
 import modelo.Cuenta;
 import modelo.Sesiones;
 import modelo.Usuario;
+import sesion.UserValidator;
 
 /**
  *
@@ -61,10 +62,10 @@ public class Principal extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         menuArchivo = new javax.swing.JMenuItem();
         jMenuCuentas = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItemCatalogo = new javax.swing.JMenuItem();
+        jMenuItemAgregarCuenta = new javax.swing.JMenuItem();
+        jMenuItemCrearPartida = new javax.swing.JMenuItem();
+        jMenuItemAjuste = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SIC-115");
@@ -108,37 +109,41 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        jMenuItem3.setText("Catalogo de Cuentas");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemCatalogo.setText("Catalogo de Cuentas");
+        jMenuItemCatalogo.setEnabled(false);
+        jMenuItemCatalogo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                jMenuItemCatalogoActionPerformed(evt);
             }
         });
-        jMenuCuentas.add(jMenuItem3);
+        jMenuCuentas.add(jMenuItemCatalogo);
 
-        jMenuItem4.setText("Agregar Cuenta");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemAgregarCuenta.setText("Agregar Cuenta");
+        jMenuItemAgregarCuenta.setEnabled(false);
+        jMenuItemAgregarCuenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
+                jMenuItemAgregarCuentaActionPerformed(evt);
             }
         });
-        jMenuCuentas.add(jMenuItem4);
+        jMenuCuentas.add(jMenuItemAgregarCuenta);
 
-        jMenuItem2.setText("Partidas");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemCrearPartida.setText("Partidas");
+        jMenuItemCrearPartida.setEnabled(false);
+        jMenuItemCrearPartida.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                jMenuItemCrearPartidaActionPerformed(evt);
             }
         });
-        jMenuCuentas.add(jMenuItem2);
+        jMenuCuentas.add(jMenuItemCrearPartida);
 
-        jMenuItem5.setText("Ajustes");
-        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemAjuste.setText("Ajustes");
+        jMenuItemAjuste.setEnabled(false);
+        jMenuItemAjuste.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem5ActionPerformed(evt);
+                jMenuItemAjusteActionPerformed(evt);
             }
         });
-        jMenuCuentas.add(jMenuItem5);
+        jMenuCuentas.add(jMenuItemAjuste);
 
         jMenuBar1.add(jMenuCuentas);
 
@@ -175,37 +180,57 @@ public class Principal extends javax.swing.JFrame {
       return this.abrir;
       }
     
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        abrir = new Catalogo(lista);
-        abrir.setLocation(centrar(abrir));
-        desktop.add(abrir);
-        abrir.show();
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    private void jMenuItemCatalogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCatalogoActionPerformed
+        //Verificar que la sesion es válida antes de mostrar el contenido
+        if(UserValidator.isSesionValida()){
+            abrir = new Catalogo(lista);
+            abrir.setLocation(centrar(abrir));
+            desktop.add(abrir);
+            abrir.show();
+        }else{
+            logout();
+        }
+        
+    }//GEN-LAST:event_jMenuItemCatalogoActionPerformed
 
     private void jMenuCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuCuentasActionPerformed
         System.out.println("aaa");
     }//GEN-LAST:event_jMenuCuentasActionPerformed
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        AddCuenta abrir = new AddCuenta(lista);
-        abrir.setLocation(centrar(abrir));
-        desktop.add(abrir);
-        abrir.show();
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
+    private void jMenuItemAgregarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAgregarCuentaActionPerformed
+        if(UserValidator.isSesionValida()){
+            AddCuenta abrir = new AddCuenta(lista);
+            abrir.setLocation(centrar(abrir));
+            desktop.add(abrir);
+            abrir.show();
+        }else{
+            logout();
+        }
+    }//GEN-LAST:event_jMenuItemAgregarCuentaActionPerformed
 
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        Partida abrir = new Partida(this.lista);
-        abrir.setLocation(centrar(abrir));
-        desktop.add(abrir);
-        abrir.show();
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    private void jMenuItemCrearPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCrearPartidaActionPerformed
+        if(UserValidator.isSesionValida()){
+            Partida abrir = new Partida(this.lista);
+            abrir.setLocation(centrar(abrir));
+            desktop.add(abrir);
+            abrir.show();
+        }else{
+            logout();
+        }
+        
+    }//GEN-LAST:event_jMenuItemCrearPartidaActionPerformed
 
-    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        Ajuste abrir = new Ajuste();
-        abrir.setLocation(centrar(abrir));
-        desktop.add(abrir);
-        abrir.show();
-    }//GEN-LAST:event_jMenuItem5ActionPerformed
+    private void jMenuItemAjusteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAjusteActionPerformed
+        if(UserValidator.isSesionValida()){
+            Ajuste abrir = new Ajuste();
+            abrir.setLocation(centrar(abrir));
+            desktop.add(abrir);
+            abrir.show();
+        }else{
+            logout();
+        }
+        
+    }//GEN-LAST:event_jMenuItemAjusteActionPerformed
     private void login(){
         Login abrir = new Login(menuArchivo,jMenuCuentas);
         abrir.setLocation(centrar(abrir));
@@ -272,10 +297,10 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuCuentas;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItemAgregarCuenta;
+    private javax.swing.JMenuItem jMenuItemAjuste;
+    private javax.swing.JMenuItem jMenuItemCatalogo;
+    private javax.swing.JMenuItem jMenuItemCrearPartida;
     private javax.swing.JMenuItem menuArchivo;
     // End of variables declaration//GEN-END:variables
 }
