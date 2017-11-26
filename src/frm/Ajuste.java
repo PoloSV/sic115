@@ -5,17 +5,30 @@
  */
 package frm;
 
+import db.Consulta;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import modelo.Cuenta;
+
 /**
  *
  * @author jaquino
  */
 public class Ajuste extends javax.swing.JInternalFrame {
-
+    List<Cuenta> lista;
     /**
      * Creates new form Ajuste
      */
-    public Ajuste() {
+    public Ajuste(List<Cuenta> lista) {
         initComponents();
+        initCol();
+        this.lista = lista;
+        iniciarComboBox();
+        
     }
 
     /**
@@ -31,23 +44,43 @@ public class Ajuste extends javax.swing.JInternalFrame {
         jTable1 = new javax.swing.JTable();
         jComboBox1 = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+
+        setClosable(true);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID Cuenta", "Cuenta", "Monto"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Double.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {}));
 
         jButton1.setText("Agregar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Guardar Cambios");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -60,7 +93,9 @@ public class Ajuste extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -69,20 +104,82 @@ public class Ajuste extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Consulta consulta = new Consulta();
+        Cuenta cc = null;
+        consulta.inicializar();
+        List<Cuenta> c =  consulta.obtenerYFiltrar("Cuenta", "nombreCuenta='"+jComboBox1.getSelectedItem().toString()+"'");
+        if(!c.isEmpty()){ //Por si las diules :v
+            for(Cuenta fc : c)
+                cc = fc;
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            if(!cuentaExistente(cc.getCodigo()))
+                model.addRow(new Object[]{cc.getCodigo(),cc.getNombreCuenta(),0.0});
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        if(jTable1.getRowCount()!=0){
+            if(!montoCero()){
+                //Código para guardar cambios :v
+            }
+            else{
+                JOptionPane.showMessageDialog(null,"Monto a cero!");
+            }
+        }
+        else{
+            JOptionPane.showMessageDialog(null,"Ingrese alguna cuenta!");
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+
+    private void iniciarComboBox() {
+        for(Cuenta c: lista)
+            if(c.getAjustable())
+                jComboBox1.addItem(c.getNombreCuenta());
+    }
+
+    private void initCol() {
+        TableColumnModel tColumnModel = jTable1.getColumnModel();
+        tColumnModel.getColumn(0).setPreferredWidth(15);
+        tColumnModel.getColumn(1).setPreferredWidth(200);
+        tColumnModel.getColumn(2).setPreferredWidth(10);
+        jTable1.setColumnModel(tColumnModel);
+    }
+    public boolean cuentaExistente(int id){
+        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+        boolean cuentaExistente = false;
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+                Integer aux = Integer.parseInt(modelo.getValueAt(i, 0).toString());
+                cuentaExistente = (aux == id);
+        }
+        return cuentaExistente;
+    }
+    public boolean montoCero(){
+        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+                Double aux = Double.parseDouble(modelo.getValueAt(i, 2).toString());
+                if(aux==0.0)
+                    return true;
+        }
+        return false;
+    }
 }

@@ -61,6 +61,7 @@ public class Principal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         menuArchivo = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuCuentas = new javax.swing.JMenu();
         jMenuItemCatalogo = new javax.swing.JMenuItem();
         jMenuItemAgregarCuenta = new javax.swing.JMenuItem();
@@ -99,10 +100,18 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu1.add(menuArchivo);
 
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setText("Cerrar");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
         jMenuBar1.add(jMenu1);
 
         jMenuCuentas.setText("Cuentas");
-        jMenuCuentas.setEnabled(false);
         jMenuCuentas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuCuentasActionPerformed(evt);
@@ -222,7 +231,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void jMenuItemAjusteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAjusteActionPerformed
         if(UserValidator.isSesionValida()){
-            Ajuste abrir = new Ajuste();
+            Ajuste abrir = new Ajuste(lista);
             abrir.setLocation(centrar(abrir));
             desktop.add(abrir);
             abrir.show();
@@ -231,6 +240,10 @@ public class Principal extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_jMenuItemAjusteActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
     private void login(){
         Login abrir = new Login(menuArchivo,jMenuCuentas);
         abrir.setLocation(centrar(abrir));
@@ -297,6 +310,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuCuentas;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItemAgregarCuenta;
     private javax.swing.JMenuItem jMenuItemAjuste;
     private javax.swing.JMenuItem jMenuItemCatalogo;

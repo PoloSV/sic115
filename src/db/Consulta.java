@@ -80,6 +80,7 @@ public class Consulta {
     }
     
     public List obtenerYFiltrar(String parametro, String cond1) {
+        
         Query resul = this.session.createQuery("FROM " + parametro + " a WHERE a."+cond1);
         
         List lista = resul.list();

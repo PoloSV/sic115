@@ -136,6 +136,7 @@ public class Login extends javax.swing.JInternalFrame {
                 case "Catalogo de Cuentas": aux.setEnabled(permisos.isVerCatalogo()); break;
                 case "Agregar Cuenta": aux.setEnabled(permisos.isAgregarCuenta()); break;
                 case "Partidas": aux.setEnabled(permisos.isIngresarPartida()); break;
+                case "Ajustes" : aux.setEnabled(permisos.isIngresarPartida()); break;
             }
         }
         
