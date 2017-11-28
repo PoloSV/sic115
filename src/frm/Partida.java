@@ -47,7 +47,6 @@ public class Partida extends javax.swing.JInternalFrame {
     }
 
     public void revisarTablaDePartida() {
-
         double sumaDebe = 0;
         double sumaHaber = 0;
         for (int i = 0; i < tablaDePartida.getRowCount(); i++) {
@@ -444,9 +443,9 @@ public class Partida extends javax.swing.JInternalFrame {
 
     private void AgregarCuentaAPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarCuentaAPartidaActionPerformed
         // TODO add your handling code here:
-
         String elementoNombre = "";
         String elementoCodigo = "";
+        
         DefaultTableModel modelo = (DefaultTableModel) tablaDePartida.getModel();
         try {
             int filaSeleccionada = tablaListaCuentas.getSelectedRow();
