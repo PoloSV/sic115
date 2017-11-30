@@ -5,9 +5,20 @@
  */
 package frm;
 
+import Clases.MateriaPrimaTableModel;
+import db.Consulta;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import modelo.EstadoPeriodo;
+import modelo.Kardex;
+import modelo.LineaKardex;
+import modelo.PeriodoContable;
+import modelo.TipoKardex;
 
 /**
  *
@@ -15,22 +26,24 @@ import javax.swing.table.TableColumnModel;
  */
 public class MateriaPrimaKardex extends javax.swing.JInternalFrame {
 
+    private MateriaPrimaTableModel materiaPrimaTModel = new MateriaPrimaTableModel();
     /**
      * Creates new form MateriaPrimaKardex
      */
     public MateriaPrimaKardex() {
         initComponents();
-        
+
         inicializarColumnas();
+        recuperarDatosPeriodoActual();
     }
-    
-    private void inicializarColumnas(){
+
+    private void inicializarColumnas() {
         TableColumnModel tColumn = new DefaultTableColumnModel();
-        
-        for (int i=0; i<10; i++){
-            TableColumn col= new TableColumn(i);
-            
-            switch (i){
+
+        for (int i = 0; i < 10; i++) {
+            TableColumn col = new TableColumn(i);
+
+            switch (i) {
                 case 0:
                     col.setHeaderValue("Fecha");
                     break;
@@ -60,13 +73,29 @@ public class MateriaPrimaKardex extends javax.swing.JInternalFrame {
                     break;
                 case 9:
                     col.setHeaderValue("Monto");
-                
+
             }
             tColumn.addColumn(col);
         }
         tablaMateriaP.setColumnModel(tColumn);
+
+    }
+    
+    private void recuperarDatosPeriodoActual(){
+        materiaPrimaTModel.getLineasKardex().clear();
+        Consulta c = new Consulta();
+        c.inicializar();
         
-}
+        PeriodoContable periodoActual = (PeriodoContable)c.obtenerYFiltrar("PeriodoContable", "estadoPeriodo="+EstadoPeriodo.ESTADO_EN_CURSO).get(0);
+        
+        Kardex kardex = (Kardex)c.obtenerYFiltrar("Kardex", "tipoKardex="+TipoKardex.KARDEX_MATERIA_PRIMA+" AND "+"periodoContable="+periodoActual.getIdPeriodo()).get(0);
+
+        ArrayList<LineaKardex> lineas = (ArrayList<LineaKardex>)c.obtenerYFiltrar("LineaKardex", "kardex="+kardex.getIdKardex()+" ORDER BY idLineaKardex");
+        
+        materiaPrimaTModel.setLineasKardex(lineas);
+
+        c.cerrarConexion();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -84,22 +113,20 @@ public class MateriaPrimaKardex extends javax.swing.JInternalFrame {
         lSalida1 = new javax.swing.JLabel();
         lSaldo1 = new javax.swing.JLabel();
 
+        setClosable(true);
+
         lMateriaP.setText("Costo de Materia Prima");
 
-        tablaMateriaP.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
+        tablaMateriaP.setModel(materiaPrimaTModel);
         jScrollPane1.setViewportView(tablaMateriaP);
 
+        lEntrada1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lEntrada1.setText("Entradas");
 
+        lSalida1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lSalida1.setText("Salidas");
 
+        lSaldo1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lSaldo1.setText("Saldos");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -107,22 +134,22 @@ public class MateriaPrimaKardex extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(156, 156, 156)
+                .addGap(210, 210, 210)
                 .addComponent(lEntrada1)
-                .addGap(148, 148, 148)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lSalida1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 159, Short.MAX_VALUE)
+                .addGap(269, 269, 269)
                 .addComponent(lSaldo1)
-                .addGap(75, 75, 75))
+                .addGap(197, 197, 197))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addComponent(lMateriaP))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 556, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1075, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -136,7 +163,7 @@ public class MateriaPrimaKardex extends javax.swing.JInternalFrame {
                     .addComponent(lSaldo1))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(132, Short.MAX_VALUE))
+                .addContainerGap(133, Short.MAX_VALUE))
         );
 
         pack();

@@ -26,6 +26,9 @@
         <property name="adminUsuarios" type="boolean">
             <column name="admin_usuarios" not-null="true" />
         </property>
+        <property name="verKardex" type="boolean">
+            <column name="kardex" not-null="true" />
+        </property>
         <set name="roleses" table="roles" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="id_permiso" />

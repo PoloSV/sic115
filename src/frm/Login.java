@@ -24,13 +24,15 @@ import modelo.Usuario;
 public class Login extends javax.swing.JInternalFrame {
     JMenuItem jMenuItem1;
     JMenu jMenuCuentas;
+    JMenu jMenuKardex;
     /**
      * Creates new form NewJInternalFrame
      */
-    public Login(JMenuItem jMenuItem1,JMenu jMenuCuentas) {
+    public Login(JMenuItem jMenuItem1,JMenu jMenuCuentas,JMenu jMenuKardex) {
         initComponents();
         this.jMenuItem1 = jMenuItem1;
         this.jMenuCuentas = jMenuCuentas;
+        this.jMenuKardex = jMenuKardex;
     }
 
     @SuppressWarnings("unchecked")
@@ -114,6 +116,7 @@ public class Login extends javax.swing.JInternalFrame {
         if(ses!=null){
             jMenuItem1.setText("Cerrar sesión");
             jMenuCuentas.setEnabled(true);
+            jMenuKardex.setEnabled(true);
             Principal.sesion = ses;
             habilitarBotones();
             this.dispose();
@@ -138,6 +141,12 @@ public class Login extends javax.swing.JInternalFrame {
                 case "Partidas": aux.setEnabled(permisos.isIngresarPartida()); break;
                 case "Ajustes" : aux.setEnabled(permisos.isIngresarPartida()); break;
             }
+        }
+        
+        //Habilitar botones del menu KARDEX
+        int itemsSegundoMenu = jMenuKardex.getItemCount();
+        for(int i=0;i<itemsSegundoMenu;i++){
+            jMenuKardex.getItem(i).setEnabled(permisos.isVerKardex());
         }
         
     }

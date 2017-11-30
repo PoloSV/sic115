@@ -14,6 +14,7 @@ public class EstadoPeriodo  implements java.io.Serializable {
      private int idEstado;
      private String nombreEstado;
      private Set periodoContables = new HashSet(0);
+     public static final int ESTADO_EN_CURSO = 1;
 
     public EstadoPeriodo() {
     }

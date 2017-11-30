@@ -67,6 +67,9 @@ public class Principal extends javax.swing.JFrame {
         jMenuItemAgregarCuenta = new javax.swing.JMenuItem();
         jMenuItemCrearPartida = new javax.swing.JMenuItem();
         jMenuItemAjuste = new javax.swing.JMenuItem();
+        jMenuKardex = new javax.swing.JMenu();
+        jMenuItemMateriaPrima = new javax.swing.JMenuItem();
+        jMenuItemProductoTerminado = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SIC-115");
@@ -156,6 +159,23 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenuCuentas);
 
+        jMenuKardex.setText("Kardex");
+
+        jMenuItemMateriaPrima.setText("Plastico PET");
+        jMenuItemMateriaPrima.setEnabled(false);
+        jMenuItemMateriaPrima.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemMateriaPrimaActionPerformed(evt);
+            }
+        });
+        jMenuKardex.add(jMenuItemMateriaPrima);
+
+        jMenuItemProductoTerminado.setText("Producto Terminado");
+        jMenuItemProductoTerminado.setEnabled(false);
+        jMenuKardex.add(jMenuItemProductoTerminado);
+
+        jMenuBar1.add(jMenuKardex);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -244,8 +264,19 @@ public class Principal extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItemMateriaPrimaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemMateriaPrimaActionPerformed
+        if(UserValidator.isSesionValida()){
+            MateriaPrimaKardex mpk = new MateriaPrimaKardex();
+            mpk.setLocation(centrar(mpk));
+            desktop.add(mpk);
+            mpk.show();
+        }else{
+            logout();
+        }
+    }//GEN-LAST:event_jMenuItemMateriaPrimaActionPerformed
     private void login(){
-        Login abrir = new Login(menuArchivo,jMenuCuentas);
+        Login abrir = new Login(menuArchivo,jMenuCuentas,jMenuKardex);
         abrir.setLocation(centrar(abrir));
         desktop.add(abrir);
         abrir.show();
@@ -255,6 +286,7 @@ public class Principal extends javax.swing.JFrame {
         for(JInternalFrame frame : desktop.getAllFrames())
             frame.dispose();
         jMenuCuentas.setEnabled(false);
+        jMenuKardex.setEnabled(false);
         sesion.setActiva(false);
         sesion.setFin(new Date());
         
@@ -315,6 +347,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemAjuste;
     private javax.swing.JMenuItem jMenuItemCatalogo;
     private javax.swing.JMenuItem jMenuItemCrearPartida;
+    private javax.swing.JMenuItem jMenuItemMateriaPrima;
+    private javax.swing.JMenuItem jMenuItemProductoTerminado;
+    private javax.swing.JMenu jMenuKardex;
     private javax.swing.JMenuItem menuArchivo;
     // End of variables declaration//GEN-END:variables
 }

@@ -18,13 +18,14 @@ public class Permisos  implements java.io.Serializable {
      private boolean agregarCuenta;
      private boolean editarCuenta;
      private boolean adminUsuarios;
+     private boolean verKardex;
      private Set roleses = new HashSet(0);
 
     public Permisos() {
     }
 
 	
-    public Permisos(int idPermiso, boolean verCatalogo, boolean ingresarPartida, boolean editarPartida, boolean agregarCuenta, boolean editarCuenta, boolean adminUsuarios) {
+    public Permisos(int idPermiso, boolean verCatalogo, boolean ingresarPartida, boolean editarPartida, boolean agregarCuenta, boolean editarCuenta, boolean adminUsuarios, boolean verKardex) {
         this.idPermiso = idPermiso;
         this.verCatalogo = verCatalogo;
         this.ingresarPartida = ingresarPartida;
@@ -32,8 +33,9 @@ public class Permisos  implements java.io.Serializable {
         this.agregarCuenta = agregarCuenta;
         this.editarCuenta = editarCuenta;
         this.adminUsuarios = adminUsuarios;
+        this.verKardex = verKardex;
     }
-    public Permisos(int idPermiso, boolean verCatalogo, boolean ingresarPartida, boolean editarPartida, boolean agregarCuenta, boolean editarCuenta, boolean adminUsuarios, Set roleses) {
+    public Permisos(int idPermiso, boolean verCatalogo, boolean ingresarPartida, boolean editarPartida, boolean agregarCuenta, boolean editarCuenta, boolean adminUsuarios, boolean verKardex, Set roleses) {
        this.idPermiso = idPermiso;
        this.verCatalogo = verCatalogo;
        this.ingresarPartida = ingresarPartida;
@@ -42,6 +44,7 @@ public class Permisos  implements java.io.Serializable {
        this.editarCuenta = editarCuenta;
        this.adminUsuarios = adminUsuarios;
        this.roleses = roleses;
+       this.verKardex = verKardex;
     }
    
     public int getIdPermiso() {
@@ -101,8 +104,16 @@ public class Permisos  implements java.io.Serializable {
         this.roleses = roleses;
     }
 
+    public boolean isVerKardex() {
+        return verKardex;
+    }
+
+    public void setVerKardex(boolean verKardex) {
+        this.verKardex = verKardex;
+    }
 
 
+    
 
 }
 

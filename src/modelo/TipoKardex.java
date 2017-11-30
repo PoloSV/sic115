@@ -12,6 +12,10 @@ public class TipoKardex implements Serializable {
     private int idTipoKardex;
     private String tipoKardex;
     private Set kardexs = new HashSet(0);
+    
+    public static final int KARDEX_MATERIA_PRIMA = 1;
+    public static final int KARDEX_PRODUCTO_EN_PROCESO = 2;
+    public static final int KARDEX_PRODUCTO_TERMINADO = 3;
 
     public TipoKardex() {
     }
