@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="modelo.LineaKardex" table="linea_kardex">
+        <id name="idLineaKardex" type="int">
+            <column name="id_linea_kardex" />
+            <generator class="increment" />
+        </id>
+        <many-to-one name="kardex" class="modelo.Kardex" fetch="select">
+            <column name="id_kardex" not-null="true" />
+        </many-to-one>
+        <property name="fechaLinea" type="date">
+            <column name="fecha_linea" length="13" not-null="true" />
+        </property>
+        <property name="entraCant" type="int">
+            <column name="entra_cant" not-null="false" />
+        </property>
+        <property name="entraUnit" type="big_decimal">
+            <column name="entra_unit" precision="10" />
+        </property>
+        <property name="entraMont" type="big_decimal">
+            <column name="entra_mont" precision="10" />
+        </property>
+        <property name="saliCant" type="int">
+            <column name="sali_cant" not-null="false"/>
+        </property>
+        <property name="saliUnit" type="big_decimal">
+            <column name="sali_unit" precision="10" />
+        </property>
+        <property name="saliMont" type="big_decimal">
+            <column name="sali_mont" precision="10" />
+        </property>
+        <property name="montCant" type="int">
+            <column name="mont_cant" not-null="false"/>
+        </property>
+        <property name="montUnit" type="big_decimal">
+            <column name="mont_unit" precision="10" />
+        </property>
+        <property name="montMont" type="big_decimal">
+            <column name="mont_mont" precision="10" />
+        </property>
+    </class>
+</hibernate-mapping>

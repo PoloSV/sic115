@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="modelo.Kardex" table="kardex">
+        <id name="idKardex" type="int">
+            <column name="id_kardex" />
+            <generator class="increment" />
+        </id>
+        <property name="sumaEntradas" type="big_decimal">
+            <column name="suma_entradas" precision="10" />
+        </property>
+        <property name="sumaSalidas" type="big_decimal">
+            <column name="suma_salidas" precision="10" />
+        </property>
+        <many-to-one name="tipoKardex" class="modelo.TipoKardex" fetch="select">
+            <column name="id_tipo_kardex" not-null="true" />
+        </many-to-one>
+        <many-to-one name="periodoContable" class="modelo.PeriodoContable" fetch="select">
+            <column name="id_periodo" not-null="true" />
+        </many-to-one>
+        <set name="lineasKardex" table="linea_kardex" inverse="true" lazy="false" fetch="select">
+            <key>
+                <column name="id_kardex" not-null="true" />
+            </key>
+            <one-to-many class="modelo.LineaKardex" />
+        </set>
+    </class>
+</hibernate-mapping>

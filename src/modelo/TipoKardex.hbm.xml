@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="modelo.TipoKardex" table="tipo_kardex">
+        <id name="idTipoKardex" type="int">
+            <column name="id_tipo_kardex" />
+            <generator class="increment" />
+        </id>
+        <property name="tipoKardex" type="string">
+            <column name="tipo_kardex" length="50" not-null="true" />
+        </property>
+        <set name="kardexs" table="kardex" inverse="true" lazy="false" fetch="select">
+            <key>
+                <column name="id_tipo_kardex" not-null="true" />
+            </key>
+            <one-to-many class="modelo.Kardex" />
+        </set>
+    </class>
+</hibernate-mapping>
