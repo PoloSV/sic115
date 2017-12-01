@@ -7,6 +7,7 @@ package frm;
 
 import db.Consulta;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -35,6 +36,13 @@ public class NuevaLineaKardexMateriaPrima extends javax.swing.JInternalFrame {
         initComponents();
         setClosable(true);
         
+        if(opcion == SALIDA){
+            txtPrecioUnitario.setEditable(false);
+            DecimalFormat df = new DecimalFormat("#.0000");
+            double preci = (kardex.getSumaEntradas().doubleValue() - kardex.getSumaSalidas().doubleValue()) / (kardex.getSumaCantidadEntradas() - kardex.getSumaCantidadSalidas());
+            preci = Double.parseDouble(df.format(preci));
+            txtPrecioUnitario.setText(String.valueOf(preci));
+        }
     }
 
     /**
@@ -148,9 +156,21 @@ public class NuevaLineaKardexMateriaPrima extends javax.swing.JInternalFrame {
                     
                 break;
                 case SALIDA:
+                    nuevaLinea.setEntraCant(0);
+                    nuevaLinea.setEntraUnit(BigDecimal.valueOf(0.0));
+                    nuevaLinea.setEntraMont(BigDecimal.valueOf(0.0));
+                    
                     nuevaLinea.setSaliCant(intCant);
                     nuevaLinea.setSaliUnit(BigDecimal.valueOf(doubleUnit));
                     nuevaLinea.setSaliMont(BigDecimal.valueOf(monto));
+                    kardex.setSumaCantidadSalidas(kardex.getSumaCantidadSalidas() + intCant);
+                    nuevaLinea.setMontCant(kardex.getSumaCantidadEntradas() - kardex.getSumaCantidadSalidas());
+                    double sumaMontoSalida = kardex.getSumaSalidas().doubleValue() + monto;
+                    kardex.setSumaSalidas(BigDecimal.valueOf(sumaMontoSalida));
+                    double sumaMontoEntrada = kardex.getSumaEntradas().doubleValue();
+                    nuevaLinea.setMontMont(BigDecimal.valueOf(sumaMontoEntrada - sumaMontoSalida));
+                    double precioUnit = (sumaMontoEntrada - sumaMontoSalida)/nuevaLinea.getMontCant();
+                    nuevaLinea.setMontUnit(BigDecimal.valueOf(precioUnit));
                 break;
             }
             Consulta c = new Consulta();
@@ -167,7 +187,9 @@ public class NuevaLineaKardexMateriaPrima extends javax.swing.JInternalFrame {
             
             JOptionPane.showMessageDialog(this, "Guardado Con exito");
             txtCantidad.setText("");
-            txtPrecioUnitario.setText("");
+            if(opcion == ENTRADA){
+                txtPrecioUnitario.setText("");
+            }        
         }catch(NumberFormatException e){
             JOptionPane.showMessageDialog(this, "Ingrese Numeros Validos", "Error en Datos", JOptionPane.ERROR_MESSAGE);
         }
