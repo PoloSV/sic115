@@ -24,7 +24,7 @@ import sesion.UserValidator;
  */
 public class Principal extends javax.swing.JFrame {
     public static Sesiones sesion;
-    public Point centrar(JInternalFrame frame){
+    public  Point centrar(JInternalFrame frame){
         Dimension desktopSize = desktop.getSize();
         Dimension jInternalFrameSize = frame.getSize();
         Point punto = new Point((desktopSize.width - jInternalFrameSize.width)/2,(desktopSize.height- jInternalFrameSize.height)/2);

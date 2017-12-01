@@ -18,6 +18,12 @@
         <many-to-one name="periodoContable" class="modelo.PeriodoContable" fetch="select">
             <column name="id_periodo" not-null="true" />
         </many-to-one>
+        <property name="sumaCantidadEntradas" type="int">
+            <column name="suma_cant_entradas" not-null="false" />
+        </property>
+        <property name="sumaCantidadSalidas" type="int">
+            <column name="suma_cant_salidas" not-null="false" />
+        </property>
         <set name="lineasKardex" table="linea_kardex" inverse="true" lazy="false" fetch="select">
             <key>
                 <column name="id_kardex" not-null="true" />

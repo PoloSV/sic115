@@ -22,13 +22,13 @@
             <column name="entra_mont" precision="10" />
         </property>
         <property name="saliCant" type="int">
-            <column name="sali_cant" not-null="false"/>
+            <column name="sali_cant" not-null="false" default="0"/>
         </property>
         <property name="saliUnit" type="big_decimal">
-            <column name="sali_unit" precision="10" />
+            <column name="sali_unit" precision="10" default="0.0" />
         </property>
         <property name="saliMont" type="big_decimal">
-            <column name="sali_mont" precision="10" />
+            <column name="sali_mont" precision="10" default="0.0" />
         </property>
         <property name="montCant" type="int">
             <column name="mont_cant" not-null="false"/>

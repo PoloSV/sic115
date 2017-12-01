@@ -15,6 +15,8 @@ public class Kardex implements Serializable{
     private BigDecimal sumaSalidas;
     private PeriodoContable periodoContable;
     private TipoKardex tipoKardex;
+    private int sumaCantidadEntradas;
+    private int sumaCantidadSalidas;
     private Set lineasKardex = new HashSet(0);
 
     public Kardex() {
@@ -26,13 +28,15 @@ public class Kardex implements Serializable{
         this.tipoKardex = tipoKardex;
     }
 
-    public Kardex(int idKardex, BigDecimal sumaEntradas, BigDecimal sumaSalidas, PeriodoContable periodoContable, TipoKardex tipoKardex, Set lineasKardex) {
+    public Kardex(int idKardex, BigDecimal sumaEntradas, BigDecimal sumaSalidas, PeriodoContable periodoContable, TipoKardex tipoKardex, int sumaCantidadEntradas, int sumaCantidadSalidas, Set lineasKardex) {
         this.idKardex = idKardex;
         this.sumaEntradas = sumaEntradas;
         this.sumaSalidas = sumaSalidas;
         this.periodoContable = periodoContable;
         this.tipoKardex = tipoKardex;
         this.lineasKardex = lineasKardex;
+        this.sumaCantidadEntradas = sumaCantidadEntradas;
+        this.sumaCantidadSalidas = sumaCantidadSalidas;
     }
 
     public int getIdKardex() {
@@ -81,6 +85,22 @@ public class Kardex implements Serializable{
 
     public void setLineasKardex(Set lineasKardex) {
         this.lineasKardex = lineasKardex;
+    }
+
+    public int getSumaCantidadEntradas() {
+        return sumaCantidadEntradas;
+    }
+
+    public void setSumaCantidadEntradas(int sumaCantidadEntradas) {
+        this.sumaCantidadEntradas = sumaCantidadEntradas;
+    }
+
+    public int getSumaCantidadSalidas() {
+        return sumaCantidadSalidas;
+    }
+
+    public void setSumaCantidadSalidas(int sumaCantidadSalidas) {
+        this.sumaCantidadSalidas = sumaCantidadSalidas;
     }
 
     

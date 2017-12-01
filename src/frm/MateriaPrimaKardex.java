@@ -7,10 +7,14 @@ package frm;
 
 import Clases.MateriaPrimaTableModel;
 import db.Consulta;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.swing.JInternalFrame;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -27,6 +31,8 @@ import modelo.TipoKardex;
 public class MateriaPrimaKardex extends javax.swing.JInternalFrame {
 
     private MateriaPrimaTableModel materiaPrimaTModel = new MateriaPrimaTableModel();
+    
+    private Kardex kardexDeMateriaPrima;
     /**
      * Creates new form MateriaPrimaKardex
      */
@@ -81,20 +87,24 @@ public class MateriaPrimaKardex extends javax.swing.JInternalFrame {
 
     }
     
-    private void recuperarDatosPeriodoActual(){
+    public void recuperarDatosPeriodoActual(){
         materiaPrimaTModel.getLineasKardex().clear();
         Consulta c = new Consulta();
         c.inicializar();
         
         PeriodoContable periodoActual = (PeriodoContable)c.obtenerYFiltrar("PeriodoContable", "estadoPeriodo="+EstadoPeriodo.ESTADO_EN_CURSO).get(0);
         
-        Kardex kardex = (Kardex)c.obtenerYFiltrar("Kardex", "tipoKardex="+TipoKardex.KARDEX_MATERIA_PRIMA+" AND "+"periodoContable="+periodoActual.getIdPeriodo()).get(0);
-
-        ArrayList<LineaKardex> lineas = (ArrayList<LineaKardex>)c.obtenerYFiltrar("LineaKardex", "kardex="+kardex.getIdKardex()+" ORDER BY idLineaKardex");
+        ArrayList<Kardex> kardex = (ArrayList<Kardex>)c.obtenerYFiltrar("Kardex", "tipoKardex="+TipoKardex.KARDEX_MATERIA_PRIMA+" AND "+"periodoContable="+periodoActual.getIdPeriodo());
         
-        materiaPrimaTModel.setLineasKardex(lineas);
-
+        if(kardex.size()>0){
+            kardexDeMateriaPrima = kardex.get(0);
+            ArrayList<LineaKardex> lineas = (ArrayList<LineaKardex>)c.obtenerYFiltrar("LineaKardex", "kardex="+kardex.get(0).getIdKardex()+" ORDER BY idLineaKardex");
+            materiaPrimaTModel.setLineasKardex(lineas);
+        }
+            
         c.cerrarConexion();
+        
+        materiaPrimaTModel.fireTableDataChanged();
     }
 
     /**
@@ -112,8 +122,27 @@ public class MateriaPrimaKardex extends javax.swing.JInternalFrame {
         lEntrada1 = new javax.swing.JLabel();
         lSalida1 = new javax.swing.JLabel();
         lSaldo1 = new javax.swing.JLabel();
+        btnEntrada = new javax.swing.JButton();
+        btnSalida = new javax.swing.JButton();
 
         setClosable(true);
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameActivated(evt);
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         lMateriaP.setText("Costo de Materia Prima");
 
@@ -128,6 +157,20 @@ public class MateriaPrimaKardex extends javax.swing.JInternalFrame {
 
         lSaldo1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lSaldo1.setText("Saldos");
+
+        btnEntrada.setText("Nueva Entrada");
+        btnEntrada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEntradaActionPerformed(evt);
+            }
+        });
+
+        btnSalida.setText("Nueva Salida");
+        btnSalida.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalidaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -150,6 +193,12 @@ public class MateriaPrimaKardex extends javax.swing.JInternalFrame {
                         .addContainerGap()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1075, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(32, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnEntrada)
+                .addGap(42, 42, 42)
+                .addComponent(btnSalida)
+                .addGap(200, 200, 200))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -163,14 +212,47 @@ public class MateriaPrimaKardex extends javax.swing.JInternalFrame {
                     .addComponent(lSaldo1))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(133, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEntrada)
+                    .addComponent(btnSalida))
+                .addContainerGap(96, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntradaActionPerformed
+        NuevaLineaKardexMateriaPrima dialogo = new NuevaLineaKardexMateriaPrima(NuevaLineaKardexMateriaPrima.ENTRADA, kardexDeMateriaPrima);
+        dialogo.setLocation(centrar(dialogo));
+        getParent().add(dialogo);
+        dialogo.show();
+    }//GEN-LAST:event_btnEntradaActionPerformed
+
+    private void btnSalidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalidaActionPerformed
+        NuevaLineaKardexMateriaPrima dialogo = new NuevaLineaKardexMateriaPrima(NuevaLineaKardexMateriaPrima.SALIDA, kardexDeMateriaPrima);
+        dialogo.setLocation(centrar(dialogo));
+        getParent().add(dialogo);
+        dialogo.show();
+    }//GEN-LAST:event_btnSalidaActionPerformed
+
+    private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
+        
+        if(this.isSelected)
+            recuperarDatosPeriodoActual();
+    }//GEN-LAST:event_formInternalFrameActivated
+
+    public  Point centrar(JInternalFrame frame){
+        Dimension desktopSize = this.getSize();
+        Dimension jInternalFrameSize = frame.getSize();
+        Point punto = new Point((desktopSize.width - jInternalFrameSize.width)/2,(desktopSize.height- jInternalFrameSize.height)/2);
+        
+        return punto;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEntrada;
+    private javax.swing.JButton btnSalida;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lEntrada1;
     private javax.swing.JLabel lMateriaP;
