@@ -172,6 +172,11 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuItemProductoTerminado.setText("Producto Terminado");
         jMenuItemProductoTerminado.setEnabled(false);
+        jMenuItemProductoTerminado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemProductoTerminadoActionPerformed(evt);
+            }
+        });
         jMenuKardex.add(jMenuItemProductoTerminado);
 
         jMenuBar1.add(jMenuKardex);
@@ -275,6 +280,17 @@ public class Principal extends javax.swing.JFrame {
             logout();
         }
     }//GEN-LAST:event_jMenuItemMateriaPrimaActionPerformed
+
+    private void jMenuItemProductoTerminadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemProductoTerminadoActionPerformed
+        if(UserValidator.isSesionValida()){
+            PTKardex ptk = new PTKardex();
+            ptk.setLocation(centrar(ptk));
+            desktop.add(ptk);
+            ptk.show();
+        }else{
+            logout();
+        }
+    }//GEN-LAST:event_jMenuItemProductoTerminadoActionPerformed
     private void login(){
         Login abrir = new Login(menuArchivo,jMenuCuentas,jMenuKardex);
         abrir.setLocation(centrar(abrir));

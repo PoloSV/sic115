@@ -5,9 +5,20 @@
  */
 package frm;
 
+import Clases.MateriaPrimaTableModel;
+import db.Consulta;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.util.ArrayList;
+import javax.swing.JInternalFrame;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import modelo.EstadoPeriodo;
+import modelo.Kardex;
+import modelo.LineaKardex;
+import modelo.PeriodoContable;
+import modelo.TipoKardex;
 
 /**
  *
@@ -15,6 +26,10 @@ import javax.swing.table.TableColumnModel;
  */
 public class PTKardex extends javax.swing.JInternalFrame {
 
+    private Kardex kardexPTerminado;
+    
+    private MateriaPrimaTableModel pTerminadoTModel = new MateriaPrimaTableModel();
+    
     /**
      * Creates new form PTKardex
      */
@@ -22,6 +37,8 @@ public class PTKardex extends javax.swing.JInternalFrame {
         initComponents();
         
         inicializarColumnas();
+        
+        recuperarDatosPeriodoActual();
     }
     
     private void inicializarColumnas(){
@@ -67,6 +84,26 @@ public class PTKardex extends javax.swing.JInternalFrame {
         tablaPT.setColumnModel(tColumn);
         
 }
+    
+    public void recuperarDatosPeriodoActual(){
+        pTerminadoTModel.getLineasKardex().clear();
+        Consulta c = new Consulta();
+        c.inicializar();
+        
+        PeriodoContable periodoActual = (PeriodoContable)c.obtenerYFiltrar("PeriodoContable", "estadoPeriodo="+EstadoPeriodo.ESTADO_EN_CURSO).get(0);
+        
+        ArrayList<Kardex> kardex = (ArrayList<Kardex>)c.obtenerYFiltrar("Kardex", "tipoKardex="+TipoKardex.KARDEX_PRODUCTO_TERMINADO+" AND "+"periodoContable="+periodoActual.getIdPeriodo());
+        
+        if(kardex.size()>0){
+            kardexPTerminado = kardex.get(0);
+            ArrayList<LineaKardex> lineas = (ArrayList<LineaKardex>)c.obtenerYFiltrar("LineaKardex", "kardex="+kardex.get(0).getIdKardex()+" ORDER BY idLineaKardex");
+            pTerminadoTModel.setLineasKardex(lineas);
+        }
+            
+        c.cerrarConexion();
+        
+        pTerminadoTModel.fireTableDataChanged();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -83,46 +120,74 @@ public class PTKardex extends javax.swing.JInternalFrame {
         lSaldo3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaPT = new javax.swing.JTable();
+        btnSalida = new javax.swing.JButton();
+
+        setClosable(true);
+        setTitle("Kardex Producto Terminado");
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameActivated(evt);
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         lPt.setText("Costos de Producto Terminado");
 
+        lEntrada3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lEntrada3.setText("Entradas");
 
+        lSalida3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lSalida3.setText("Salidas");
 
+        lSaldo3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lSaldo3.setText("Saldos");
 
-        tablaPT.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        tablaPT.setModel(pTerminadoTModel);
         jScrollPane1.setViewportView(tablaPT);
+
+        btnSalida.setText("Nueva Salida");
+        btnSalida.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalidaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(173, 173, 173)
+                .addGap(244, 244, 244)
                 .addComponent(lEntrada3)
-                .addGap(161, 161, 161)
+                .addGap(254, 254, 254)
                 .addComponent(lSalida3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lSaldo3)
-                .addGap(116, 116, 116))
+                .addGap(200, 200, 200))
             .addGroup(layout.createSequentialGroup()
-                .addGap(49, 49, 49)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 596, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lPt))
-                .addContainerGap(44, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addComponent(lPt))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1089, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(28, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSalida)
+                .addGap(105, 105, 105))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -134,16 +199,38 @@ public class PTKardex extends javax.swing.JInternalFrame {
                     .addComponent(lSalida3)
                     .addComponent(lSaldo3)
                     .addComponent(lEntrada3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                .addComponent(btnSalida)
+                .addGap(38, 38, 38))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSalidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalidaActionPerformed
+        NuevaLineaKardexMateriaPrima dialogo = new NuevaLineaKardexMateriaPrima(NuevaLineaKardexMateriaPrima.SALIDA, kardexPTerminado);
+        dialogo.setLocation(centrar(dialogo));
+        getParent().add(dialogo);
+        dialogo.show();
+    }//GEN-LAST:event_btnSalidaActionPerformed
+
+    private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
+        if(this.isSelected)
+            recuperarDatosPeriodoActual();
+    }//GEN-LAST:event_formInternalFrameActivated
+
+    public  Point centrar(JInternalFrame frame){
+        Dimension desktopSize = this.getSize();
+        Dimension jInternalFrameSize = frame.getSize();
+        Point punto = new Point((desktopSize.width - jInternalFrameSize.width)/2,(desktopSize.height- jInternalFrameSize.height)/2);
+        
+        return punto;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSalida;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lEntrada3;
     private javax.swing.JLabel lPt;

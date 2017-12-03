@@ -126,6 +126,7 @@ public class MateriaPrimaKardex extends javax.swing.JInternalFrame {
         btnSalida = new javax.swing.JButton();
 
         setClosable(true);
+        setTitle("Kardex Materia Prima");
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
                 formInternalFrameActivated(evt);
