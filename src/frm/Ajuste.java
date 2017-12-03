@@ -299,7 +299,7 @@ public class Ajuste extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null,"Inicia sesión para continuar!");
         }else if(jTableCuentas.getRowCount() == 0){
             JOptionPane.showMessageDialog(null,"No deje la partida sin contenido");
-        }else if(totalDebe.getText().equals("0.0")){
+        }else if(revisarTabla()){
             JOptionPane.showMessageDialog(null,"Agregue datos a las cuentas.");
         }else if(!errorPartidaDoble.getText().equals("")){
             JOptionPane.showMessageDialog(null,"Asegurese de cumplir partida doble.");
@@ -371,6 +371,18 @@ public class Ajuste extends javax.swing.JInternalFrame {
             etiquetaTotal.setForeground(Color.BLACK);
         }
 
+    }
+
+    private boolean revisarTabla() {
+        DefaultTableModel modelo = (DefaultTableModel) jTableAjustes.getModel();
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+                Double debe = Double.parseDouble(String.valueOf(modelo.getValueAt(i, 2)));
+                Double haber = Double.parseDouble(String.valueOf(modelo.getValueAt(i, 3)));
+                if (debe==0 && haber == 0) {
+                    return true;
+                }
+        }
+        return false;
     }
 
 }
