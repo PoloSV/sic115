@@ -73,6 +73,10 @@ public class Principal extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuBalances = new javax.swing.JMenu();
+        jMenuBG = new javax.swing.JMenuItem();
+        jMenuBC = new javax.swing.JMenuItem();
+        jMenuBCA = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SIC-115");
@@ -163,6 +167,11 @@ public class Principal extends javax.swing.JFrame {
         jMenuBar1.add(jMenuCuentas);
 
         jMenuKardex.setText("Kardex");
+        jMenuKardex.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuKardexActionPerformed(evt);
+            }
+        });
 
         jMenuItemMateriaPrima.setText("Plastico PET");
         jMenuItemMateriaPrima.setEnabled(false);
@@ -203,6 +212,39 @@ public class Principal extends javax.swing.JFrame {
         jMenu2.add(jMenuItem3);
 
         jMenuBar1.add(jMenu2);
+
+        jMenuBalances.setText("Balances");
+        jMenuBalances.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuBalancesActionPerformed(evt);
+            }
+        });
+
+        jMenuBG.setLabel("Balance General");
+        jMenuBG.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuBGActionPerformed(evt);
+            }
+        });
+        jMenuBalances.add(jMenuBG);
+
+        jMenuBC.setLabel("Balance de Comprobacion");
+        jMenuBC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuBCActionPerformed(evt);
+            }
+        });
+        jMenuBalances.add(jMenuBC);
+
+        jMenuBCA.setLabel("Balance de Comprobación AJUSTES");
+        jMenuBCA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuBCAActionPerformed(evt);
+            }
+        });
+        jMenuBalances.add(jMenuBCA);
+
+        jMenuBar1.add(jMenuBalances);
 
         setJMenuBar(jMenuBar1);
 
@@ -359,6 +401,52 @@ public class Principal extends javax.swing.JFrame {
             logout();
         }
     }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuBGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuBGActionPerformed
+        // TODO add your handling code here:
+        if(UserValidator.isSesionValida()){
+            BalanceDeComprobacionAjustado bca = new BalanceDeComprobacionAjustado();
+            bca.setLocation(centrar(bca));
+            desktop.add(bca);
+            bca.show();
+        }else{
+            logout();
+        }
+    }//GEN-LAST:event_jMenuBGActionPerformed
+
+    private void jMenuBCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuBCActionPerformed
+        // TODO add your handling code here:
+        if(UserValidator.isSesionValida()){
+            BalanceDeComprobacion bc = new BalanceDeComprobacion();
+            bc.setLocation(centrar(bc));
+            desktop.add(bc);
+            bc.show();
+        }else{
+            logout();
+        }
+    }//GEN-LAST:event_jMenuBCActionPerformed
+
+    private void jMenuBCAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuBCAActionPerformed
+        // TODO add your handling code here:
+        if(UserValidator.isSesionValida()){
+            BalanceGeneral bg = new BalanceGeneral();
+            bg.setLocation(centrar(bg));
+            desktop.add(bg);
+            bg.show();
+        }else{
+            logout();
+        }
+    }//GEN-LAST:event_jMenuBCAActionPerformed
+
+    private void jMenuBalancesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuBalancesActionPerformed
+        // TODO add your handling code here:
+        //aquíii
+        
+    }//GEN-LAST:event_jMenuBalancesActionPerformed
+
+    private void jMenuKardexActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuKardexActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuKardexActionPerformed
     private void login(){
         Login abrir = new Login(menuArchivo,jMenuCuentas,jMenuKardex);
         abrir.setLocation(centrar(abrir));
@@ -425,6 +513,10 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JDesktopPane desktop;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuItem jMenuBC;
+    private javax.swing.JMenuItem jMenuBCA;
+    private javax.swing.JMenuItem jMenuBG;
+    private javax.swing.JMenu jMenuBalances;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuCuentas;
     private javax.swing.JMenuItem jMenuItem1;
