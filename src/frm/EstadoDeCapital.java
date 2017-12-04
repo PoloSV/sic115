@@ -381,13 +381,9 @@ public class EstadoDeCapital extends javax.swing.JInternalFrame {
 
     private void initTextFields() {
         for(Cuenta c: lista){
-            BigDecimal saldo = new BigDecimal(0.0);
-            if(c.getSumaDebe().compareTo(new BigDecimal(0.0))!=0)
-                saldo = c.getSumaDebe();
-            else
-                saldo = c.getSumaHaber();
+            Double saldo = Math.abs(c.getSumaDebe().doubleValue()-c.getSumaHaber().doubleValue());
             switch(c.getCodigo()){
-                case 31:{
+                case 331:{
                     tfCapital.setText(String.valueOf(saldo));
                     break;
                 }
