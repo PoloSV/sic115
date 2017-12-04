@@ -12,6 +12,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import db.Consulta;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.List;
@@ -27,19 +28,21 @@ import modelo.Cuenta;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author Fatima
  */
 public class EstadoDeResultados extends javax.swing.JInternalFrame {
+
     List<Cuenta> lista;
+
     /**
      * Creates new form EstadoDeResultados
      */
     public EstadoDeResultados(List<Cuenta> lista) {
         initComponents();
         this.lista = lista;
+        inicializarFormulario();
     }
 
     private EstadoDeResultados() {
@@ -69,7 +72,8 @@ public class EstadoDeResultados extends javax.swing.JInternalFrame {
         tfUtilidad = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setClosable(true);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Estado de Resultados");
 
@@ -149,16 +153,8 @@ public class EstadoDeResultados extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(146, 146, 146)
-                                .addComponent(jLabel1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(21, 21, 21)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
-                        .addGap(0, 108, Short.MAX_VALUE))
+                        .addGap(146, 146, 146)
+                        .addComponent(jLabel1))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -176,7 +172,12 @@ public class EstadoDeResultados extends javax.swing.JInternalFrame {
                             .addComponent(tfUtilidad)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -219,7 +220,7 @@ public class EstadoDeResultados extends javax.swing.JInternalFrame {
 
             PdfWriter.getInstance(document, new FileOutputStream(open.getSelectedFile() + ".pdf"));
             document.open();
-            
+
             Paragraph p = new Paragraph("PROPLASTIC S.A. DE C.V.");
             p.setAlignment(Element.ALIGN_CENTER);
             document.add(p);
@@ -279,55 +280,55 @@ public class EstadoDeResultados extends javax.swing.JInternalFrame {
             }
         });
     }
+
     private void addRows(PdfPTable table) {
         Font fontBold = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.BOLD);
         Font fontItalic = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.ITALIC);
         PdfPCell cell;
         //Crear el header
-        cell = new PdfPCell(new Phrase("Ingresos",fontBold));
+        cell = new PdfPCell(new Phrase("Ingresos", fontBold));
         cell.setColspan(3);
         table.addCell(cell);
-        
+
         DefaultTableModel modelo = (DefaultTableModel) jTableIngresos.getModel();
         for (int i = 0; i < modelo.getRowCount(); i++) {
-            
+
             cell = new PdfPCell(new Phrase(String.valueOf(modelo.getValueAt(i, 0))));
             cell.setColspan(2);
             table.addCell(cell);
-            
+
             String aux = String.valueOf(modelo.getValueAt(i, 1));
             table.addCell(aux);
-            
+
         }
-        cell = new PdfPCell(new Phrase("Total Ingresos",fontItalic));
+        cell = new PdfPCell(new Phrase("Total Ingresos", fontItalic));
         cell.setColspan(2);
         table.addCell(cell);
         table.addCell(tfTotalIngresos.getText());
-        
-        cell = new PdfPCell(new Phrase("Egresos",fontBold));
+
+        cell = new PdfPCell(new Phrase("Egresos", fontBold));
         cell.setColspan(3);
         table.addCell(cell);
-        
+
         modelo = (DefaultTableModel) jTableEgresos.getModel();
         for (int i = 0; i < modelo.getRowCount(); i++) {
             String aux = String.valueOf(modelo.getValueAt(i, 0));
             table.addCell(aux);
-            
+
             cell = new PdfPCell(new Phrase(String.valueOf(modelo.getValueAt(i, 1))));
             cell.setColspan(2);
-            table.addCell(cell);            
+            table.addCell(cell);
         }
-        cell = new PdfPCell(new Phrase("Total Egresos",fontItalic));
+        cell = new PdfPCell(new Phrase("Total Egresos", fontItalic));
         cell.setColspan(2);
         table.addCell(cell);
         table.addCell(tfTotalEgresos.getText());
-        
-        
-        cell = new PdfPCell(new Phrase("Utilidad",fontBold));
+
+        cell = new PdfPCell(new Phrase("Utilidad", fontBold));
         cell.setColspan(2);
         table.addCell(cell);
         table.addCell(tfUtilidad.getText());
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -345,11 +346,47 @@ public class EstadoDeResultados extends javax.swing.JInternalFrame {
     private javax.swing.JTextField tfUtilidad;
     // End of variables declaration//GEN-END:variables
 
-    private void inicializarFormulario() {
-        for(Cuenta c: lista){
-            if(c.getCuenta().getCodigo()==4){//Por ejemplo en el caso que sea 4
-                
-            }
+    public double inicializarFormulario() {
+//        for(Cuenta c: lista){
+//            if(c.getCuenta().getCodigo()==4){//Por ejemplo en el caso que sea 4
+//                
+//            }
+//        }
+        double totalIngresos = 0;
+        DefaultTableModel modelo = (DefaultTableModel)jTableIngresos.getModel();
+        Consulta c = new Consulta();
+        c.inicializar();
+
+        List<Cuenta> cuent = c.obtenerYFiltrar("Cuenta", "codigo LIKE '51_%' AND operable=true");
+        for (Cuenta q : cuent) {
+            modelo.addRow(new Object[]{q.getNombreCuenta(), q.getSumaHaber()});
+            totalIngresos += q.getSumaHaber().doubleValue();
         }
+        
+        tfTotalIngresos.setText(String.valueOf(totalIngresos));
+
+        c.cerrarConexion();
+        
+        
+        double totalEgresos = 0;
+        DefaultTableModel modeloEgresos = (DefaultTableModel) jTableEgresos.getModel();
+        Consulta d = new Consulta();
+        d.inicializar();
+        cuent.clear();
+        cuent = d.obtenerYFiltrar("Cuenta", "codigo LIKE '4%' AND operable=true AND codigo <> '416' AND codigo <> '4161' AND codigo <> '4162' AND codigo <> '4163'");
+        for(Cuenta w: cuent){
+            modeloEgresos.addRow(new Object[]{w.getNombreCuenta(), w.getSumaDebe()});
+            totalEgresos += w.getSumaDebe().doubleValue();
+        }
+        
+        d.cerrarConexion();
+        tfTotalEgresos.setText(String.valueOf(totalEgresos));
+        
+        double utilidad = totalIngresos - totalEgresos;
+        
+        tfUtilidad.setText(String.valueOf(utilidad));
+        
+        return utilidad;
+
     }
 }
