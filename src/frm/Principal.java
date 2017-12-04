@@ -258,7 +258,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void jMenuItemCrearPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCrearPartidaActionPerformed
         if(UserValidator.isSesionValida()){
-            Partida abrir = new Partida(this.lista);
+            Partida abrir = new Partida(this.lista, this.sesion);
             abrir.setLocation(centrar(abrir));
             desktop.add(abrir);
             abrir.show();

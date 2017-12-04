@@ -5,6 +5,7 @@
  */
 package frm;
 
+import db.Consulta;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -25,6 +26,8 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import modelo.Cuenta;
 import modelo.LineaDePartida;
+import modelo.PeriodoContable;
+import modelo.Sesiones;
 
 
 /**
@@ -37,12 +40,14 @@ public class Partida extends javax.swing.JInternalFrame {
      * Creates new form Partida
      */
     List<Cuenta> lista = new ArrayList<>();
-
-    public Partida(List<Cuenta> lista) {
+    public static Sesiones sesion;
+    
+    public Partida(List<Cuenta> lista, Sesiones sesion) {
         this.lista = lista;
         initComponents();
         generarTablaInicialBusqueda();
         generarTablaInicialPartida();
+        this.sesion = sesion;
 
     }
 
@@ -493,21 +498,56 @@ public class Partida extends javax.swing.JInternalFrame {
             errorDescripcion.setText("");
             errorPartidaDoble.setText("");
             
+        Consulta con = new Consulta();
+        con.inicializar();
+        Integer idPeriodo = con.getLastId("modelo.PeriodoContable", "idPeriodo");
+        List<PeriodoContable> periodo = con.obtenerYFiltrar("modelo.PeriodoContable", "idPeriodo = "+idPeriodo);
+        Date fecha = new Date();    
         modelo.Partida nuevaPartida = new modelo.Partida();
-        Date fecha = new Date();
         nuevaPartida.setDescripcion(campoDescripcion.getText().trim());
+       // nuevaPartida.setIdPartida(1);
         nuevaPartida.setFecha(fecha);
+
+        nuevaPartida.setUsuario(sesion.getUsuario());
+        nuevaPartida.setPeriodoContable(periodo.get(0));
+        con.guardar(nuevaPartida);
+        con.cerrarConexion();
+        LineaDePartida linea = new LineaDePartida();
        
-        HashSet<LineaDePartida> lineasPartida = new HashSet<>();
-        for(int i=0; i<=tablaDePartida.getRowCount(); i++){
-            tablaDePartida.getValueAt(i, 0);
-            for(int j=0; j<=tablaDePartida.getRowCount(); j++){
-                
-            }
-            
+        for(int i=0; i<tablaDePartida.getRowCount(); i++){
+            con.inicializar();
+            //Obteniendo datos de la tabla
+           Integer codigo = (Integer) tablaDePartida.getValueAt(i, 0);
+           String nombre = (String) tablaDePartida.getValueAt(i, 1);
+           List<Cuenta> arreglo =  con.obtenerYFiltrar("modelo.Cuenta", "idCuenta ="+codigo);
+           Cuenta cuenta = arreglo.get(0);
+           BigDecimal debe = new BigDecimal((Double) tablaDePartida.getValueAt(i, 2));
+           BigDecimal haber = new BigDecimal((Double) tablaDePartida.getValueAt(i, 3));
+           
+           //Obteniendo valores de la Cuenta para la suma acumulada.
+           Double debeCuenta = cuenta.getSumaDebe().doubleValue();
+           Double haberCuenta = cuenta.getSumaHaber().doubleValue();
+           
+           //Asignando valores a la cuenta correspondiente, sumatoria acumulada.
+           BigDecimal debeTotalCuenta = new BigDecimal(debeCuenta + debe.doubleValue());
+           BigDecimal haberTotalCuenta = new BigDecimal(haberCuenta + haber.doubleValue());
+           cuenta.setSumaDebe(debeTotalCuenta);
+           cuenta.setSumaHaber(haberTotalCuenta);
+           con.actualizar(cuenta);
+           con.cerrarConexion();
+           con.inicializar();
+           //Guardando la linea de partida. Una por iteracion.
+           linea.setIdLinea(codigo);
+           linea.setCuenta(cuenta);
+           linea.setDebe(debe);
+           linea.setHaber(haber);
+           linea.setPartida(nuevaPartida);
+           con.guardar(linea);
+          con.cerrarConexion();
         }
-        
-        nuevaPartida.setLineaDePartidas(lineasPartida);
+        errorTablaPartida.setText("Guardado con exito. Puede crear otra partida o salir.");
+       
+
         }
         
     }//GEN-LAST:event_jButton1ActionPerformed

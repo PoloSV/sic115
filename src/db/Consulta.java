@@ -51,12 +51,13 @@ public class Consulta {
         this.session.update(objeto);
         this.tr.commit();
     }
-        public Object getByID(String cuenta, String id) {
-        Query resul = this.session.createQuery("FROM " + cuenta + " WHERE id="+id );
+
+    public Object getByID(String cuenta, String id) {
+        Query resul = this.session.createQuery("FROM " + cuenta + " WHERE id=" + id);
         List c = resul.list();
         return c.get(0);
-        }
-    
+    }
+
     //Devuelve un objeto del tipo de la clase, lo busca por id.
     public Object obtener(Class clase, Serializable i) {
         Object o = this.session.get(clase, i);
@@ -78,13 +79,18 @@ public class Consulta {
         List lista = resul.list();
         return lista;
     }
-    
+
     public List obtenerYFiltrar(String parametro, String cond1) {
-        
-        Query resul = this.session.createQuery("FROM " + parametro + " a WHERE a."+cond1);
-        
+
+        Query resul = this.session.createQuery("FROM " + parametro + " a WHERE a." + cond1);
+
         List lista = resul.list();
         return lista;
+    }
+
+    public Integer getLastId(String tabla, String columna) {
+        Integer lastId = (Integer) session.createQuery("Select max(i." + columna + ") from " + tabla + " i").uniqueResult();
+        return lastId;
     }
 
     //Cierra la conexion. Importante cada vez que ya no usemos la base.
