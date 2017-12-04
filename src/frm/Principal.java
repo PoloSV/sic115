@@ -405,7 +405,7 @@ public class Principal extends javax.swing.JFrame {
     private void jMenuBGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuBGActionPerformed
         // TODO add your handling code here:
         if(UserValidator.isSesionValida()){
-            BalanceDeComprobacionAjustado bca = new BalanceDeComprobacionAjustado();
+            BalanceGeneral bca = new BalanceGeneral();
             bca.setLocation(centrar(bca));
             desktop.add(bca);
             bca.show();
@@ -429,7 +429,7 @@ public class Principal extends javax.swing.JFrame {
     private void jMenuBCAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuBCAActionPerformed
         // TODO add your handling code here:
         if(UserValidator.isSesionValida()){
-            BalanceGeneral bg = new BalanceGeneral();
+            BalanceDeComprobacionAjustado bg = new BalanceDeComprobacionAjustado();
             bg.setLocation(centrar(bg));
             desktop.add(bg);
             bg.show();

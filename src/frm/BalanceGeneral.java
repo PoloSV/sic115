@@ -41,10 +41,12 @@ public class BalanceGeneral extends javax.swing.JInternalFrame {
     public BalanceGeneral(List<Cuenta> lista) {
         initComponents();
         this.lista = lista;
+        inicializarFormulario();
     }
     
     public BalanceGeneral() {
         initComponents();
+        inicializarFormulario();
     }
 
     /**
@@ -176,12 +178,6 @@ public class BalanceGeneral extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(525, 525, 525)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel9))
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -199,10 +195,20 @@ public class BalanceGeneral extends javax.swing.JInternalFrame {
                                                 .addGap(18, 18, Short.MAX_VALUE)
                                                 .addComponent(jLabel7))))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel6)
-                                            .addComponent(jLabel8))))
+                                        .addContainerGap()
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(95, 95, 95)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel4)
+                                                    .addComponent(jLabel9))
+                                                .addGap(0, 0, Short.MAX_VALUE))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                    .addComponent(jLabel6)
+                                                    .addComponent(jLabel8))))))
                                 .addGap(40, 40, 40))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(323, 323, 323)
@@ -214,11 +220,6 @@ public class BalanceGeneral extends javax.swing.JInternalFrame {
                             .addComponent(tfPatrimonio)
                             .addComponent(tfParticipaciones))))
                 .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(460, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -229,19 +230,24 @@ public class BalanceGeneral extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfPasivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addGap(15, 15, 15)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(tfCapitalContable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(52, 52, 52)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tfPasivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6))
+                        .addGap(15, 15, 15)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9)
+                            .addComponent(tfCapitalContable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(52, 52, 52))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
@@ -258,14 +264,9 @@ public class BalanceGeneral extends javax.swing.JInternalFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(tfParticipaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addComponent(jButton2)
                 .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(92, 92, 92)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(140, Short.MAX_VALUE)))
         );
 
         pack();
@@ -438,10 +439,10 @@ public class BalanceGeneral extends javax.swing.JInternalFrame {
         Consulta c = new Consulta();
         c.inicializar();
 
-        List<Cuenta> cuent = c.obtenerYFiltrar("cuenta", "codigo LIKE '1_%' AND operable=true");
+        List<Cuenta> cuent = c.obtenerYFiltrar("Cuenta", "codigo LIKE '1_%' AND operable=true");
         for (Cuenta q : cuent) {
-            modeloI.addRow(new Object[]{q.getNombreCuenta(), q.getSumaHaber()});
-            totalActivos = q.getSumaHaber().doubleValue()- q.getSumaHaber().doubleValue();
+            modeloI.addRow(new Object[]{q.getCodigo(),q.getNombreCuenta(), q.getSumaDebe().doubleValue()-q.getSumaHaber().doubleValue()});
+            totalActivos += (q.getSumaDebe().doubleValue()- q.getSumaHaber().doubleValue());
         }
         
         tfActivos.setText(String.valueOf(totalActivos));
@@ -454,10 +455,10 @@ public class BalanceGeneral extends javax.swing.JInternalFrame {
         Consulta d = new Consulta();
         d.inicializar();
         cuent.clear();
-        List<Cuenta> cuenta = d.obtenerYFiltrar("cuenta", "codigo LIKE '2_%' AND operable=true");
+        List<Cuenta> cuenta = d.obtenerYFiltrar("Cuenta", "codigo LIKE '2_%' AND operable=true");
         for(Cuenta q: cuenta){
-            modeloP.addRow(new Object[]{q.getNombreCuenta(), q.getSumaDebe()});
-            totalPasivos = q.getSumaDebe().doubleValue() - q.getSumaHaber().doubleValue();
+            modeloP.addRow(new Object[]{q.getCodigo(),q.getNombreCuenta(), q.getSumaHaber().doubleValue() - q.getSumaDebe().doubleValue()});
+            totalPasivos += (q.getSumaHaber().doubleValue() - q.getSumaDebe().doubleValue());
         }
         
         tfPasivos.setText(String.valueOf(totalPasivos));
@@ -468,11 +469,11 @@ public class BalanceGeneral extends javax.swing.JInternalFrame {
         Consulta e = new Consulta();
         e.inicializar();
         cuenta.clear();
-        List<Cuenta> patri = e.obtenerYFiltrar("cuenta", "codigo = 331");
-        for(Cuenta q: cuenta){
-           totalCapitalContable = q.getSumaDebe().doubleValue() - q.getSumaHaber().doubleValue();
+        List<Cuenta> patri = e.obtenerYFiltrar("Cuenta", "codigo = '331'");
+        for(Cuenta q: patri){
+           totalCapitalContable = q.getSumaHaber().doubleValue() - q.getSumaDebe().doubleValue();
         }
-        
+        //De aqui para abajo faltan las desinversiones, etc
         tfCapitalContable.setText(String.valueOf(totalCapitalContable));
         tfPatrimonio = tfCapitalContable;
         e.cerrarConexion();

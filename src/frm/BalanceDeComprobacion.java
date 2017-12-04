@@ -12,6 +12,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import db.Consulta;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.List;
@@ -35,12 +36,15 @@ public class BalanceDeComprobacion extends javax.swing.JInternalFrame {
     public BalanceDeComprobacion(List<Cuenta> lista) {
         initComponents();
         this.lista = lista;
+        iniciarDatos();
     }
     public BalanceDeComprobacion() {
         initComponents();
         
-        Balance b = new Balance();
-        b.extraerComprobacion();
+        //Balance b = new Balance();
+        //b.extraerComprobacion();
+        
+        iniciarDatos();
     }
 
     /**
@@ -60,7 +64,8 @@ public class BalanceDeComprobacion extends javax.swing.JInternalFrame {
         tfAcreedor = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setClosable(true);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("BALANCE DE COMPROBACIÓN");
 
@@ -109,24 +114,23 @@ public class BalanceDeComprobacion extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(100, 100, 100)
-                            .addComponent(tfDeudor, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(tfAcreedor))
-                        .addGroup(layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(98, 98, 98)
-                            .addComponent(jLabel1)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(100, 100, 100)
+                        .addComponent(tfDeudor, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(tfAcreedor, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(98, 98, 98)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 856, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -247,6 +251,29 @@ public class BalanceDeComprobacion extends javax.swing.JInternalFrame {
         
         table.addCell(tfDeudor.getText());
         table.addCell(tfAcreedor.getText());
+    }
+    
+    
+    private void iniciarDatos(){
+        double totHaber = 0;
+        double totDebe = 0;
+        
+        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+        
+        Consulta c = new Consulta();
+        c.inicializar();
+        
+        List<Cuenta> cuentas = c.obtener("Cuenta");
+        for(Cuenta x: cuentas){
+            modelo.addRow(new Object[]{x.getCodigo(),x.getNombreCuenta(),x.getSumaDebe().doubleValue(), x.getSumaHaber().doubleValue()});
+            totDebe += x.getSumaDebe().doubleValue();
+            totHaber += x.getSumaHaber().doubleValue();
+        }
+        
+        tfDeudor.setText(String.valueOf(totDebe));
+        tfAcreedor.setText(String.valueOf(totHaber));
+        
+        c.cerrarConexion();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
