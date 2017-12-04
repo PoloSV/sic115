@@ -240,6 +240,10 @@ public class Principal extends javax.swing.JFrame {
     private void jMenuItemCatalogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCatalogoActionPerformed
         //Verificar que la sesion es válida antes de mostrar el contenido
         if(UserValidator.isSesionValida()){
+            Consulta c = new Consulta();
+            c.inicializar();
+            this.lista = c.obtener("Cuenta");
+            c.cerrarConexion();
             abrir = new Catalogo(lista);
             abrir.setLocation(centrar(abrir));
             desktop.add(abrir);
