@@ -240,6 +240,10 @@ public class Principal extends javax.swing.JFrame {
     private void jMenuItemCatalogoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCatalogoActionPerformed
         //Verificar que la sesion es válida antes de mostrar el contenido
         if(UserValidator.isSesionValida()){
+            Consulta c = new Consulta();
+            c.inicializar();
+            this.lista = c.obtener("Cuenta");
+            c.cerrarConexion();
             abrir = new Catalogo(lista);
             abrir.setLocation(centrar(abrir));
             desktop.add(abrir);
@@ -267,6 +271,10 @@ public class Principal extends javax.swing.JFrame {
 
     private void jMenuItemCrearPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCrearPartidaActionPerformed
         if(UserValidator.isSesionValida()){
+            Consulta c = new Consulta();
+            c.inicializar();
+            this.lista = c.obtener("Cuenta");
+            c.cerrarConexion();
             Partida abrir = new Partida(this.lista, this.sesion);
             abrir.setLocation(centrar(abrir));
             desktop.add(abrir);
@@ -279,6 +287,10 @@ public class Principal extends javax.swing.JFrame {
 
     private void jMenuItemAjusteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAjusteActionPerformed
         if(UserValidator.isSesionValida()){
+            Consulta c = new Consulta();
+            c.inicializar();
+            this.lista = c.obtener("Cuenta");
+            c.cerrarConexion();
             Ajuste abrir = new Ajuste(lista);
             abrir.setLocation(centrar(abrir));
             desktop.add(abrir);
@@ -320,6 +332,10 @@ public class Principal extends javax.swing.JFrame {
         //La parte de la lista se hace con todas las ventanas en las que queramos manipular/leer Cuentas
         //por el hecho que se hace más fácil que estar haciendo consultas cada vez que se quiera usar.
         if(UserValidator.isSesionValida()){
+            Consulta c = new Consulta();
+            c.inicializar();
+            this.lista = c.obtener("Cuenta");
+            c.cerrarConexion();
             EstadoDeResultados edr = new EstadoDeResultados(lista); //Con todo y la lista iniciamos la ventana
             edr.setLocation(centrar(edr));
             desktop.add(edr);
@@ -331,6 +347,10 @@ public class Principal extends javax.swing.JFrame {
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         if(UserValidator.isSesionValida()){
+            Consulta c = new Consulta();
+            c.inicializar();
+            this.lista = c.obtener("Cuenta");
+            c.cerrarConexion();
             EstadoDeCapital edr = new EstadoDeCapital(lista); //Con todo y la lista iniciamos la ventana
             edr.setLocation(centrar(edr));
             desktop.add(edr);
