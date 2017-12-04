@@ -70,6 +70,8 @@ public class Principal extends javax.swing.JFrame {
         jMenuKardex = new javax.swing.JMenu();
         jMenuItemMateriaPrima = new javax.swing.JMenuItem();
         jMenuItemProductoTerminado = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SIC-115");
@@ -181,6 +183,18 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenuKardex);
 
+        jMenu2.setText("Informes");
+
+        jMenuItem2.setText("Estado de Resultados");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu2);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -291,6 +305,20 @@ public class Principal extends javax.swing.JFrame {
             logout();
         }
     }//GEN-LAST:event_jMenuItemProductoTerminadoActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        //Para abrir un formulario nuevo validamos si la sesión es, válida :v
+        //La parte de la lista se hace con todas las ventanas en las que queramos manipular/leer Cuentas
+        //por el hecho que se hace más fácil que estar haciendo consultas cada vez que se quiera usar.
+        if(UserValidator.isSesionValida()){
+            EstadoDeResultados edr = new EstadoDeResultados(lista); //Con todo y la lista iniciamos la ventana
+            edr.setLocation(centrar(edr));
+            desktop.add(edr);
+            edr.show();
+        }else{
+            logout();
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
     private void login(){
         Login abrir = new Login(menuArchivo,jMenuCuentas,jMenuKardex);
         abrir.setLocation(centrar(abrir));
@@ -356,9 +384,11 @@ public class Principal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane desktop;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuCuentas;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItemAgregarCuenta;
     private javax.swing.JMenuItem jMenuItemAjuste;
     private javax.swing.JMenuItem jMenuItemCatalogo;

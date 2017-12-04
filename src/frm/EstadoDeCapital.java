@@ -15,15 +15,22 @@ import java.util.stream.Stream;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableColumn;
+import modelo.Cuenta;
 
-public class EstadoDeCapital extends javax.swing.JFrame {
+public class EstadoDeCapital extends javax.swing.JInternalFrame {
+    java.util.List<Cuenta> lista;
 
+    public EstadoDeCapital(java.util.List<Cuenta> lista) {
+        initComponents();
+        this.lista = lista;
+    }
     /**
      * Creates new form EstadoDeCapital
      */
     public EstadoDeCapital() {
         initComponents();
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.

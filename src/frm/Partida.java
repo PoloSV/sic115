@@ -502,9 +502,9 @@ public class Partida extends javax.swing.JInternalFrame {
         for(int i=0; i<=tablaDePartida.getRowCount(); i++){
             tablaDePartida.getValueAt(i, 0);
             for(int j=0; j<=tablaDePartida.getRowCount(); j++){
-            
+                
             }
-            // lineasPartida.add()
+            
         }
         
         nuevaPartida.setLineaDePartidas(lineasPartida);

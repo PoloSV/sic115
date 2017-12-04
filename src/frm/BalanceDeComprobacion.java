@@ -14,21 +14,27 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import modelo.Cuenta;
 
 /**
  *
  * @author Fatima
  */
-public class BalanceDeComprobacion extends javax.swing.JFrame {
-
+public class BalanceDeComprobacion extends javax.swing.JInternalFrame {
+    List<Cuenta> lista;
     /**
      * Creates new form BalanceDeComprobacion
      */
+    public BalanceDeComprobacion(List<Cuenta> lista) {
+        initComponents();
+        this.lista = lista;
+    }
     public BalanceDeComprobacion() {
         initComponents();
     }
