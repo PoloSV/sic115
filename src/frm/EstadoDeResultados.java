@@ -15,6 +15,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import db.Consulta;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -385,6 +386,14 @@ public class EstadoDeResultados extends javax.swing.JInternalFrame {
         double utilidad = totalIngresos - totalEgresos;
         
         tfUtilidad.setText(String.valueOf(utilidad));
+        
+        
+        Consulta x = new Consulta();
+        x.inicializar();
+        Cuenta yoyo = (Cuenta)x.getByID("Cuenta", "321");
+        yoyo.setSumaHaber(BigDecimal.valueOf(utilidad));
+        x.actualizar(yoyo);
+        x.cerrarConexion();
         
         return utilidad;
 
