@@ -23,10 +23,10 @@ public class NuevaLineaKardexMateriaPrima extends javax.swing.JInternalFrame {
 
     public static final int ENTRADA = 1;
     public static final int SALIDA = 2;
-    
+
     private int opcion;
     private Kardex kardex;
-    
+
     /**
      * Creates new form NuevaLineaKardexMateriaPrima
      */
@@ -35,8 +35,8 @@ public class NuevaLineaKardexMateriaPrima extends javax.swing.JInternalFrame {
         this.kardex = kardexMatPrima;
         initComponents();
         setClosable(true);
-        
-        if(opcion == SALIDA){
+
+        if (opcion == SALIDA) {
             txtPrecioUnitario.setEditable(false);
             DecimalFormat df = new DecimalFormat("#.0000");
             double preci = (kardex.getSumaEntradas().doubleValue() - kardex.getSumaSalidas().doubleValue()) / (kardex.getSumaCantidadEntradas() - kardex.getSumaCantidadSalidas());
@@ -127,78 +127,103 @@ public class NuevaLineaKardexMateriaPrima extends javax.swing.JInternalFrame {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         String cant = txtCantidad.getText();
         String unit = txtPrecioUnitario.getText();
-        
-        try{
+
+        try {
             int intCant = Integer.parseInt(cant);
             double doubleUnit = Double.parseDouble(unit);
-            double monto = intCant*doubleUnit;
-            LineaKardex nuevaLinea = new LineaKardex();
-            nuevaLinea.setFechaLinea(new Date());
-            nuevaLinea.setKardex(kardex);
-            switch(opcion){
-                case ENTRADA:
-                    nuevaLinea.setSaliCant(0);
-                    nuevaLinea.setSaliUnit(BigDecimal.valueOf(0.0));
-                    nuevaLinea.setSaliMont(BigDecimal.valueOf(0.0));
-                    
-                    nuevaLinea.setEntraCant(intCant);
-                    nuevaLinea.setEntraUnit(BigDecimal.valueOf(doubleUnit));
-                    nuevaLinea.setEntraMont(BigDecimal.valueOf(monto));
-                    kardex.setSumaCantidadEntradas(kardex.getSumaCantidadEntradas() + intCant);
-                    nuevaLinea.setMontCant(kardex.getSumaCantidadEntradas() - kardex.getSumaCantidadSalidas());
-                    double sumaMontoEntradas = kardex.getSumaEntradas().doubleValue() + monto;
-                    kardex.setSumaEntradas(BigDecimal.valueOf(sumaMontoEntradas));
-                    double sumaMontoSalidas = kardex.getSumaSalidas().doubleValue();
-                    nuevaLinea.setMontMont(BigDecimal.valueOf(sumaMontoEntradas - sumaMontoSalidas));
-                    double precioUnitario = (sumaMontoEntradas - sumaMontoSalidas)/nuevaLinea.getMontCant();
-                    nuevaLinea.setMontUnit(BigDecimal.valueOf(precioUnitario));
-                    
-                    
-                break;
-                case SALIDA:
-                    nuevaLinea.setEntraCant(0);
-                    nuevaLinea.setEntraUnit(BigDecimal.valueOf(0.0));
-                    nuevaLinea.setEntraMont(BigDecimal.valueOf(0.0));
-                    
-                    nuevaLinea.setSaliCant(intCant);
-                    nuevaLinea.setSaliUnit(BigDecimal.valueOf(doubleUnit));
-                    nuevaLinea.setSaliMont(BigDecimal.valueOf(monto));
-                    kardex.setSumaCantidadSalidas(kardex.getSumaCantidadSalidas() + intCant);
-                    nuevaLinea.setMontCant(kardex.getSumaCantidadEntradas() - kardex.getSumaCantidadSalidas());
-                    double sumaMontoSalida = kardex.getSumaSalidas().doubleValue() + monto;
-                    kardex.setSumaSalidas(BigDecimal.valueOf(sumaMontoSalida));
-                    double sumaMontoEntrada = kardex.getSumaEntradas().doubleValue();
-                    nuevaLinea.setMontMont(BigDecimal.valueOf(sumaMontoEntrada - sumaMontoSalida));
-                    double precioUnit = (sumaMontoEntrada - sumaMontoSalida)/nuevaLinea.getMontCant();
-                    nuevaLinea.setMontUnit(BigDecimal.valueOf(precioUnit));
-                break;
+            double monto = intCant * doubleUnit;
+            if (intCant > 0) {
+                LineaKardex nuevaLinea = new LineaKardex();
+                nuevaLinea.setFechaLinea(new Date());
+                nuevaLinea.setKardex(kardex);
+                switch (opcion) {
+                    case ENTRADA:
+                        nuevaLinea.setSaliCant(0);
+                        nuevaLinea.setSaliUnit(BigDecimal.valueOf(0.0));
+                        nuevaLinea.setSaliMont(BigDecimal.valueOf(0.0));
+
+                        nuevaLinea.setEntraCant(intCant);
+                        nuevaLinea.setEntraUnit(BigDecimal.valueOf(doubleUnit));
+                        nuevaLinea.setEntraMont(BigDecimal.valueOf(monto));
+                        kardex.setSumaCantidadEntradas(kardex.getSumaCantidadEntradas() + intCant);
+                        nuevaLinea.setMontCant(kardex.getSumaCantidadEntradas() - kardex.getSumaCantidadSalidas());
+                        double sumaMontoEntradas = kardex.getSumaEntradas().doubleValue() + monto;
+                        kardex.setSumaEntradas(BigDecimal.valueOf(sumaMontoEntradas));
+                        double sumaMontoSalidas = kardex.getSumaSalidas().doubleValue();
+                        nuevaLinea.setMontMont(BigDecimal.valueOf(sumaMontoEntradas - sumaMontoSalidas));
+
+                        double precioUnitario = (sumaMontoEntradas - sumaMontoSalidas) / nuevaLinea.getMontCant();
+                        nuevaLinea.setMontUnit(BigDecimal.valueOf(precioUnitario));
+
+                        Consulta c = new Consulta();
+                        c.inicializar();
+
+                        c.actualizar(kardex);
+                        c.cerrarConexion();
+
+                        Consulta d = new Consulta();
+                        d.inicializar();
+                        d.guardar(nuevaLinea);
+
+                        d.cerrarConexion();
+                        
+                        JOptionPane.showMessageDialog(this, "Entrada Guardada");
+
+                        break;
+                    case SALIDA:
+                        if ((kardex.getSumaCantidadEntradas() - kardex.getSumaCantidadSalidas() - intCant) >= 0) {
+                            nuevaLinea.setEntraCant(0);
+                            nuevaLinea.setEntraUnit(BigDecimal.valueOf(0.0));
+                            nuevaLinea.setEntraMont(BigDecimal.valueOf(0.0));
+
+                            nuevaLinea.setSaliCant(intCant);
+                            nuevaLinea.setSaliUnit(BigDecimal.valueOf(doubleUnit));
+                            nuevaLinea.setSaliMont(BigDecimal.valueOf(monto));
+                            kardex.setSumaCantidadSalidas(kardex.getSumaCantidadSalidas() + intCant);
+                            nuevaLinea.setMontCant(kardex.getSumaCantidadEntradas() - kardex.getSumaCantidadSalidas());
+                            double sumaMontoSalida = kardex.getSumaSalidas().doubleValue() + monto;
+                            kardex.setSumaSalidas(BigDecimal.valueOf(sumaMontoSalida));
+                            double sumaMontoEntrada = kardex.getSumaEntradas().doubleValue();
+                            nuevaLinea.setMontMont(BigDecimal.valueOf(sumaMontoEntrada - sumaMontoSalida));
+                            if (nuevaLinea.getMontCant() > 0) {
+                                double precioUnit = (sumaMontoEntrada - sumaMontoSalida) / nuevaLinea.getMontCant();
+                                nuevaLinea.setMontUnit(BigDecimal.valueOf(precioUnit));
+                            }
+                            Consulta e = new Consulta();
+                            e.inicializar();
+
+                            e.actualizar(kardex);
+                            e.cerrarConexion();
+
+                            Consulta f = new Consulta();
+                            f.inicializar();
+                            f.guardar(nuevaLinea);
+
+                            f.cerrarConexion();
+
+                            JOptionPane.showMessageDialog(this, "Salida Guardada");
+                        } else {
+                            JOptionPane.showMessageDialog(this, "No hay inventario", "Error", JOptionPane.WARNING_MESSAGE);
+                        }
+
+                        break;
+                }
+
+                txtCantidad.setText("");
+                if (opcion == ENTRADA) {
+                    txtPrecioUnitario.setText("");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "La cantidad a sacar debe ser mayor a cero");
             }
-            Consulta c = new Consulta();
-            c.inicializar();
-            
-            c.actualizar(kardex);
-            c.cerrarConexion();
-            
-            Consulta d = new Consulta();
-            d.inicializar();
-            d.guardar(nuevaLinea);
-            
-            d.cerrarConexion();
-            
-            JOptionPane.showMessageDialog(this, "Guardado Con exito");
-            txtCantidad.setText("");
-            if(opcion == ENTRADA){
-                txtPrecioUnitario.setText("");
-            }        
-        }catch(NumberFormatException e){
+
+        } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Ingrese Numeros Validos", "Error en Datos", JOptionPane.ERROR_MESSAGE);
         }
-        
-        
-        
+
     }//GEN-LAST:event_btnGuardarActionPerformed
-   
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardar;
     private javax.swing.JLabel jLabel1;
