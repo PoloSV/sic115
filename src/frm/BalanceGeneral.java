@@ -13,6 +13,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import db.Consulta;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.List;
@@ -75,7 +76,7 @@ public class BalanceGeneral extends javax.swing.JInternalFrame {
         tfParticipaciones = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("BALANCE GENERAL");
 
@@ -169,32 +170,6 @@ public class BalanceGeneral extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(212, 212, 212)
-                                .addComponent(jLabel5)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(40, 40, 40)
-                                        .addComponent(jLabel1)
-                                        .addGap(215, 215, 215))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(tfActivos, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel7))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel8))))
-                        .addGap(40, 40, 40)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfCapitalContable)
-                            .addComponent(tfPasivos, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(tfPatrimonio)
-                            .addComponent(tfParticipaciones)))
-                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -207,7 +182,37 @@ public class BalanceGeneral extends javax.swing.JInternalFrame {
                             .addComponent(jLabel4)
                             .addComponent(jLabel9))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(212, 212, 212)
+                                        .addComponent(jLabel5)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(40, 40, 40)
+                                                .addComponent(jLabel1)
+                                                .addGap(215, 215, 215))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(18, 18, Short.MAX_VALUE)
+                                                .addComponent(jLabel7))))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel6)
+                                            .addComponent(jLabel8))))
+                                .addGap(40, 40, 40))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(323, 323, 323)
+                                .addComponent(tfActivos, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tfCapitalContable)
+                            .addComponent(tfPasivos, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(tfPatrimonio)
+                            .addComponent(tfParticipaciones))))
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -238,8 +243,9 @@ public class BalanceGeneral extends javax.swing.JInternalFrame {
                     .addComponent(tfCapitalContable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(52, 52, 52)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
+                        .addGap(8, 8, 8)
                         .addComponent(tfActivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -252,7 +258,7 @@ public class BalanceGeneral extends javax.swing.JInternalFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(tfParticipaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
                 .addComponent(jButton2)
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -419,5 +425,65 @@ public class BalanceGeneral extends javax.swing.JInternalFrame {
         cell.setColspan(2);
         table.addCell(cell);
         table.addCell(tfParticipaciones.getText());
+    }
+    
+    public double inicializarFormulario() {
+//        for(Cuenta c: lista){
+//            if(c.getCuenta().getCodigo()==4){//Por ejemplo en el caso que sea 4
+//                
+//            }
+//        }
+        double totalActivos = 0;
+        DefaultTableModel modeloI = (DefaultTableModel)jTableActivos.getModel();
+        Consulta c = new Consulta();
+        c.inicializar();
+
+        List<Cuenta> cuent = c.obtenerYFiltrar("cuenta", "codigo LIKE '1_%' AND operable=true");
+        for (Cuenta q : cuent) {
+            modeloI.addRow(new Object[]{q.getNombreCuenta(), q.getSumaHaber()});
+            totalActivos = q.getSumaHaber().doubleValue()- q.getSumaHaber().doubleValue();
+        }
+        
+        tfActivos.setText(String.valueOf(totalActivos));
+
+        c.cerrarConexion();
+        
+        
+        double totalPasivos = 0;
+        DefaultTableModel modeloP = (DefaultTableModel) jTablePasivos.getModel();
+        Consulta d = new Consulta();
+        d.inicializar();
+        cuent.clear();
+        List<Cuenta> cuenta = d.obtenerYFiltrar("cuenta", "codigo LIKE '2_%' AND operable=true");
+        for(Cuenta q: cuenta){
+            modeloP.addRow(new Object[]{q.getNombreCuenta(), q.getSumaDebe()});
+            totalPasivos = q.getSumaDebe().doubleValue() - q.getSumaHaber().doubleValue();
+        }
+        
+        tfPasivos.setText(String.valueOf(totalPasivos));
+        
+        d.cerrarConexion();
+        
+        double totalCapitalContable = 0;
+        Consulta e = new Consulta();
+        e.inicializar();
+        cuenta.clear();
+        List<Cuenta> patri = e.obtenerYFiltrar("cuenta", "codigo = 331");
+        for(Cuenta q: cuenta){
+           totalCapitalContable = q.getSumaDebe().doubleValue() - q.getSumaHaber().doubleValue();
+        }
+        
+        tfCapitalContable.setText(String.valueOf(totalCapitalContable));
+        tfPatrimonio = tfCapitalContable;
+        e.cerrarConexion();
+        //tfCapitalContable
+        //tfPatrimonio
+        double participaciones = totalPasivos - totalCapitalContable;
+        
+        
+        tfParticipaciones.setText(String.valueOf(participaciones));
+        
+        return participaciones;
+
     }
 }
