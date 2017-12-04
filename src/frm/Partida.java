@@ -538,7 +538,7 @@ public class Partida extends javax.swing.JInternalFrame {
            con.cerrarConexion();
            con.inicializar();
            //Guardando la linea de partida. Una por iteracion.
-           linea.setIdLinea(codigo);
+          // linea.setIdLinea(codigo);
            linea.setCuenta(cuenta);
            linea.setDebe(debe);
            linea.setHaber(haber);

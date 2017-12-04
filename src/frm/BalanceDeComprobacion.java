@@ -21,6 +21,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import modelo.Cuenta;
+import modelo.Balance;
 
 /**
  *
@@ -37,6 +38,9 @@ public class BalanceDeComprobacion extends javax.swing.JInternalFrame {
     }
     public BalanceDeComprobacion() {
         initComponents();
+        
+        Balance b = new Balance();
+        b.extraerComprobacion();
     }
 
     /**
