@@ -6,7 +6,7 @@
     <class name="modelo.LineaDePartida" table="linea_de_partida" schema="public" optimistic-lock="version">
         <id name="idLinea" type="int">
             <column name="id_linea" />
-            <generator class="assigned" />
+            <generator class="increment" />
         </id>
         <many-to-one name="cuenta" class="modelo.Cuenta" fetch="select">
             <column name="id_cuenta" not-null="true" />
