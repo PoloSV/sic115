@@ -17,7 +17,97 @@ public class CostosDeProduccion extends javax.swing.JInternalFrame {
      */
     public CostosDeProduccion() {
         initComponents();
+        
+        costos();
+        
     }
+        
+    private void costos(){
+    
+    double mesclado = 84648.4698;
+    double extruccion = 96131.9766;
+    double prensado = 96131.9766;
+    double taladrado = 79565.51454;
+    double empacado = 91229.9681;
+    
+    double sumatoria;
+    sumatoria = mesclado + extruccion + prensado + taladrado + empacado;
+            
+            
+    jTextField23.setText(String.valueOf(mesclado));
+    jTextField31.setText(String.valueOf(extruccion));
+    jTextField11.setText(String.valueOf(prensado));
+    jTextField34.setText(String.valueOf(taladrado));
+    jTextField24.setText(String.valueOf(empacado));
+    
+    double mpM=Double.parseDouble(jTextField22.getText());
+    double moM=Double.parseDouble(jTextField21.getText());
+    double cifM=Double.parseDouble(jTextField23.getText());
+    
+    double totalMesclado=0;
+    totalMesclado=mpM+moM+cifM;
+    
+    jTextField4.setText(String.valueOf(totalMesclado));
+    
+    //
+    jTextField28.setText(String.valueOf(totalMesclado));
+    
+    double mpE=Double.parseDouble(jTextField28.getText());
+    double moE=Double.parseDouble(jTextField29.getText());
+    double cifE=Double.parseDouble(jTextField31.getText());
+    
+    double totalExtruccion=0;
+    totalExtruccion=mpE+moE+cifE;
+    
+    jTextField30.setText(String.valueOf(totalExtruccion));
+    
+    //
+    jTextField9.setText(String.valueOf(totalExtruccion));
+    
+    double mpP=Double.parseDouble(jTextField9.getText());
+    double moP=Double.parseDouble(jTextField10.getText());
+    double cifP=Double.parseDouble(jTextField11.getText());
+    
+    double totalPrensado=0;
+    totalPrensado=mpP+moP+cifP;
+    
+    jTextField12.setText(String.valueOf(totalPrensado));
+    
+    
+    //
+    jTextField32.setText(String.valueOf(totalPrensado));
+    
+    double mpT=Double.parseDouble(jTextField32.getText());
+    double moT=Double.parseDouble(jTextField33.getText());
+    double cifT=Double.parseDouble(jTextField34.getText());
+    
+    double totalTaladrado=0;
+    totalTaladrado=mpT+moT+cifT;
+    
+    jTextField35.setText(String.valueOf(totalTaladrado));
+    
+    
+    //
+    jTextField26.setText(String.valueOf(totalTaladrado));
+    
+    double mpEm=Double.parseDouble(jTextField26.getText());
+    double moEm=Double.parseDouble(jTextField22.getText());
+    double cifEm=Double.parseDouble(jTextField24.getText());
+    
+    double totalEmpaquetado=0;
+    totalEmpaquetado=mpE+moE+cifE;
+    
+    jTextField25.setText(String.valueOf(totalEmpaquetado));
+    
+    double CostoProduccion=Double.parseDouble(jTextField25.getText());
+    double cantidad=Double.parseDouble(tfCantidadesProducidas.getText());
+    
+    double costoUnitario=0;
+    costoUnitario=CostoProduccion/cantidad;
+    
+    tfCosoUnitario.setText(String.valueOf(costoUnitario));
+    
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
