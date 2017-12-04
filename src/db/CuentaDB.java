@@ -13,21 +13,7 @@ import modelo.TipoCuenta;
 public class CuentaDB {
     public ArrayList<Cuenta> cuentas = new ArrayList<>();
     
-    public TipoCuenta getTipoCuenta(int id){
-        TipoCuenta tc = null;
-        String sentenciaSQL = "SELECT * FROM tipo_cuenta WHERE id_tipo = ?";
-        try {
-            PreparedStatement pS = Conexion.getConexion().prepareStatement(sentenciaSQL);
-            pS.setInt(1, id);
-            ResultSet rs = pS.executeQuery();
-            while(rs.next()){
-                tc = new TipoCuenta(rs.getInt("id_tipo"),rs.getString("nombre_tipo"));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(CuentaDB.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return tc;
-    }
+    
     
     public void getFromDB(){
 //        try {
