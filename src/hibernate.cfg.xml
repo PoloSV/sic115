@@ -43,9 +43,9 @@ Contributor(s):
   <session-factory>
     <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
     <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-    <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/postgres</property>
+    <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/sic</property>
     <property name="hibernate.connection.username">postgres</property>
-    <property name="hibernate.connection.password">123456</property>
+    <property name="hibernate.connection.password">administrador</property>
     <mapping resource="modelo/LineaDePartida.hbm.xml"/>
     <mapping resource="modelo/Empleados.hbm.xml"/>
     <mapping resource="modelo/Sesiones.hbm.xml"/>

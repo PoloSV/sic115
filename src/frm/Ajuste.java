@@ -292,7 +292,7 @@ public class Ajuste extends javax.swing.JInternalFrame {
                     }
                 }
             } else {
-                JOptionPane.showMessageDialog(null, ":v");
+                JOptionPane.showMessageDialog(null, "Ya ingreso esa cuenta.");
             }
 
         } catch (ArrayIndexOutOfBoundsException e) {
