@@ -7,6 +7,7 @@ import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import static java.lang.Math.E;
+import java.math.BigDecimal;
 import java.util.Enumeration;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -16,6 +17,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableColumn;
 import modelo.Cuenta;
+import modelo.TipoCuenta;
 
 public class EstadoDeCapital extends javax.swing.JInternalFrame {
     java.util.List<Cuenta> lista;
@@ -23,6 +25,7 @@ public class EstadoDeCapital extends javax.swing.JInternalFrame {
     public EstadoDeCapital(java.util.List<Cuenta> lista) {
         initComponents();
         this.lista = lista;
+        initTextFields();
     }
     /**
      * Creates new form EstadoDeCapital
@@ -374,5 +377,48 @@ public class EstadoDeCapital extends javax.swing.JInternalFrame {
         table.addCell(cell);
         cell = new PdfPCell(new Phrase(tfCapitalContable.getText()));
         table.addCell(cell);
+    }
+
+    private void initTextFields() {
+        for(Cuenta c: lista){
+            BigDecimal saldo = new BigDecimal(0.0);
+            if(c.getSumaDebe().compareTo(new BigDecimal(0.0))!=0)
+                saldo = c.getSumaDebe();
+            else
+                saldo = c.getSumaHaber();
+            switch(c.getCodigo()){
+                case 31:{
+                    tfCapital.setText(String.valueOf(saldo));
+                    break;
+                }
+                case 321:{
+                    tfUtilidad.setText(String.valueOf(saldo));
+                    break;
+                }
+                case 4161:{
+                    tfGastosDN.setText(String.valueOf(saldo));
+                    break;
+                }
+                case 4162:{
+                    tfGastosI.setText(String.valueOf(saldo));
+                    break;
+                }
+                case 4163:{
+                    tfGastosRobo.setText(String.valueOf(saldo));
+                    break;
+                }
+            }
+        }
+        Double capital = Double.parseDouble(tfCapital.getText());
+        Double utilidad = Double.parseDouble(tfUtilidad.getText());
+        Double gastosDN = Double.parseDouble(tfGastosDN.getText());
+        Double gastosI = Double.parseDouble(tfGastosI.getText());
+        Double gastosRobo = Double.parseDouble(tfGastosRobo.getText());
+        Double inversion = capital+utilidad;
+        Double desinversion = gastosDN+gastosI+gastosRobo;
+        tfTotalInv.setText(String.valueOf(inversion));
+        tfTotalDes.setText(String.valueOf(desinversion));
+        tfCapitalContable.setText(String.valueOf(inversion-desinversion));
+        
     }
 }
