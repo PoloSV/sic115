@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -23,6 +24,7 @@ import modelo.Kardex;
 import modelo.LineaKardex;
 import modelo.PeriodoContable;
 import modelo.TipoKardex;
+import sesion.UserValidator;
 
 /**
  *
@@ -124,24 +126,25 @@ public class MateriaPrimaKardex extends javax.swing.JInternalFrame {
         lSaldo1 = new javax.swing.JLabel();
         btnEntrada = new javax.swing.JButton();
         btnSalida = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Kardex Materia Prima");
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
-            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
-                formInternalFrameActivated(evt);
-            }
-            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
             }
             public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
             }
-            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
             }
             public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
             }
-            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameActivated(evt);
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
             }
         });
 
@@ -173,6 +176,13 @@ public class MateriaPrimaKardex extends javax.swing.JInternalFrame {
             }
         });
 
+        jButton1.setText("Costos de Producción");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -186,20 +196,22 @@ public class MateriaPrimaKardex extends javax.swing.JInternalFrame {
                 .addComponent(lSaldo1)
                 .addGap(197, 197, 197))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(lMateriaP))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1075, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(32, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnEntrada)
-                .addGap(42, 42, 42)
-                .addComponent(btnSalida)
-                .addGap(200, 200, 200))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnEntrada)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(24, 24, 24)
+                            .addComponent(lMateriaP))
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1075, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,8 +228,9 @@ public class MateriaPrimaKardex extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEntrada)
-                    .addComponent(btnSalida))
-                .addContainerGap(96, Short.MAX_VALUE))
+                    .addComponent(btnSalida)
+                    .addComponent(jButton1))
+                .addContainerGap(99, Short.MAX_VALUE))
         );
 
         pack();
@@ -243,6 +256,27 @@ public class MateriaPrimaKardex extends javax.swing.JInternalFrame {
             recuperarDatosPeriodoActual();
     }//GEN-LAST:event_formInternalFrameActivated
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Double sumaEntradas = 0.0;
+        Double sumaSalidas = 0.0;
+        for(int i=0;i<tablaMateriaP.getColumnCount()-1;i++){
+            sumaEntradas+=Double.parseDouble(String.valueOf(tablaMateriaP.getValueAt(i, 3)));
+            
+            sumaSalidas+=Double.parseDouble(String.valueOf(tablaMateriaP.getValueAt(i, 6)));
+        }
+        Double diferencia = sumaEntradas - sumaSalidas;
+        
+        if(UserValidator.isSesionValida()){
+            CostosDeProduccion cdp = new CostosDeProduccion(diferencia);
+            cdp.setLocation(centrar(cdp));
+            this.getDesktopPane().add(cdp);
+            cdp.show();
+        }else{
+            JOptionPane.showMessageDialog(this,"Debe de iniciar sesion!");
+        }
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     public  Point centrar(JInternalFrame frame){
         Dimension desktopSize = this.getSize();
         Dimension jInternalFrameSize = frame.getSize();
@@ -254,6 +288,7 @@ public class MateriaPrimaKardex extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEntrada;
     private javax.swing.JButton btnSalida;
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lEntrada1;
     private javax.swing.JLabel lMateriaP;

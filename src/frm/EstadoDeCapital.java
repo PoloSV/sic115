@@ -65,8 +65,8 @@ public class EstadoDeCapital extends javax.swing.JInternalFrame {
         tfCapitalContable = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setResizable(false);
+        setClosable(true);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("ESTADO DE CAPITAL");
 

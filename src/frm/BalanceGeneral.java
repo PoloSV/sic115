@@ -78,6 +78,7 @@ public class BalanceGeneral extends javax.swing.JInternalFrame {
         tfParticipaciones = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
 
+        setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("BALANCE GENERAL");
