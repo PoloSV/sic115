@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 import modelo.Cuenta;
 import modelo.Sesiones;
 import modelo.Usuario;
@@ -24,6 +25,7 @@ import sesion.UserValidator;
  */
 public class Principal extends javax.swing.JFrame {
     public static Sesiones sesion;
+    public boolean cicloContable = true;
     public  Point centrar(JInternalFrame frame){
         Dimension desktopSize = desktop.getSize();
         Dimension jInternalFrameSize = frame.getSize();
@@ -70,13 +72,15 @@ public class Principal extends javax.swing.JFrame {
         jMenuKardex = new javax.swing.JMenu();
         jMenuItemMateriaPrima = new javax.swing.JMenuItem();
         jMenuItemProductoTerminado = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        jMenuInformes = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuBalances = new javax.swing.JMenu();
         jMenuBG = new javax.swing.JMenuItem();
         jMenuBC = new javax.swing.JMenuItem();
         jMenuBCA = new javax.swing.JMenuItem();
+        jMenuEstadoCiclo = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SIC-115");
@@ -193,7 +197,8 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenuKardex);
 
-        jMenu2.setText("Informes");
+        jMenuInformes.setText("Informes");
+        jMenuInformes.setEnabled(false);
 
         jMenuItem2.setText("Estado de Resultados");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
@@ -201,7 +206,7 @@ public class Principal extends javax.swing.JFrame {
                 jMenuItem2ActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem2);
+        jMenuInformes.add(jMenuItem2);
 
         jMenuItem3.setText("Estado de Capital");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
@@ -209,11 +214,12 @@ public class Principal extends javax.swing.JFrame {
                 jMenuItem3ActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem3);
+        jMenuInformes.add(jMenuItem3);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(jMenuInformes);
 
         jMenuBalances.setText("Balances");
+        jMenuBalances.setEnabled(false);
         jMenuBalances.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuBalancesActionPerformed(evt);
@@ -245,6 +251,18 @@ public class Principal extends javax.swing.JFrame {
         jMenuBalances.add(jMenuBCA);
 
         jMenuBar1.add(jMenuBalances);
+
+        jMenuEstadoCiclo.setText("Estado del Ciclo: Abierto");
+
+        jMenuItem4.setText("Cerrar Ciclo Contable");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenuEstadoCiclo.add(jMenuItem4);
+
+        jMenuBar1.add(jMenuEstadoCiclo);
 
         setJMenuBar(jMenuBar1);
 
@@ -328,7 +346,10 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemCrearPartidaActionPerformed
 
     private void jMenuItemAjusteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAjusteActionPerformed
-        if(UserValidator.isSesionValida()){
+        if(cicloContable){
+            JOptionPane.showMessageDialog(this,"El ciclo contable actualmente está abierto.");
+        }
+        else if(UserValidator.isSesionValida()){
             Consulta c = new Consulta();
             c.inicializar();
             this.lista = c.obtener("Cuenta");
@@ -447,6 +468,16 @@ public class Principal extends javax.swing.JFrame {
     private void jMenuKardexActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuKardexActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuKardexActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        cicloContable=!cicloContable;
+        jMenuItem4.setEnabled(cicloContable);
+        jMenuItemCrearPartida.setEnabled(cicloContable);
+        jMenuEstadoCiclo.setText("Estado del Ciclo: CERRADO");
+        jMenuInformes.setEnabled(true);
+        jMenuBalances.setEnabled(true);
+        jMenuKardex.setEnabled(false);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
     private void login(){
         Login abrir = new Login(menuArchivo,jMenuCuentas,jMenuKardex);
         abrir.setLocation(centrar(abrir));
@@ -512,16 +543,18 @@ public class Principal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane desktop;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuItem jMenuBC;
     private javax.swing.JMenuItem jMenuBCA;
     private javax.swing.JMenuItem jMenuBG;
     private javax.swing.JMenu jMenuBalances;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuCuentas;
+    private javax.swing.JMenu jMenuEstadoCiclo;
+    private javax.swing.JMenu jMenuInformes;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItemAgregarCuenta;
     private javax.swing.JMenuItem jMenuItemAjuste;
     private javax.swing.JMenuItem jMenuItemCatalogo;

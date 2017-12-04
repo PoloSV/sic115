@@ -305,7 +305,7 @@ public class Ajuste extends javax.swing.JInternalFrame {
         if (!UserValidator.isSesionValida()) {
             JOptionPane.showMessageDialog(null, "Inicia sesión para continuar!");
         } else if (jTableCuentas.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(null, "No deje la partida sin contenido");
+            JOptionPane.showMessageDialog(null, "No deje la tabla sin contenido");
         } else if (revisarTabla()) {
             JOptionPane.showMessageDialog(null, "Agregue datos a las cuentas.");
         } else if (!errorPartidaDoble.getText().equals("")) {
