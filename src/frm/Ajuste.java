@@ -6,7 +6,10 @@
 package frm;
 
 import db.Consulta;
+import static frm.Partida.sesion;
 import java.awt.Color;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.event.TableModelEvent;
@@ -16,6 +19,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import modelo.Cuenta;
+import modelo.LineaDePartida;
+import modelo.PeriodoContable;
 import sesion.UserValidator;
 
 /**
@@ -23,7 +28,9 @@ import sesion.UserValidator;
  * @author jaquino
  */
 public class Ajuste extends javax.swing.JInternalFrame {
+
     List<Cuenta> lista;
+
     /**
      * Creates new form Ajuste
      */
@@ -244,7 +251,7 @@ public class Ajuste extends javax.swing.JInternalFrame {
             DefaultTableModel modelo = (DefaultTableModel) jTableCuentas.getModel();
             modelo.getDataVector().removeAllElements();
             for (Cuenta i : lista) {
-                if ((i.getAjustable()&&i.getOperable())&&(i.getNombreCuenta().toLowerCase().contains(nombre) || String.valueOf(i.getCodigo()).contains(nombre))) {
+                if ((i.getAjustable() && i.getOperable()) && (i.getNombreCuenta().toLowerCase().contains(nombre) || String.valueOf(i.getCodigo()).contains(nombre))) {
                     modelo.addRow(new Object[]{i.getCodigo(), i.getNombreCuenta()});
                 }
             }
@@ -260,7 +267,7 @@ public class Ajuste extends javax.swing.JInternalFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         String elementoNombre = "";
         String elementoCodigo = "";
-        
+
         DefaultTableModel modelo = (DefaultTableModel) jTableAjustes.getModel();
         try {
             int filaSeleccionada = jTableCuentas.getSelectedRow();
@@ -284,34 +291,67 @@ public class Ajuste extends javax.swing.JInternalFrame {
                         modelo.fireTableDataChanged();
                     }
                 }
-            }else{
-                JOptionPane.showMessageDialog(null,":v");
+            } else {
+                JOptionPane.showMessageDialog(null, ":v");
             }
 
         } catch (ArrayIndexOutOfBoundsException e) {
 
         }
-        
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(!UserValidator.isSesionValida()){
-            JOptionPane.showMessageDialog(null,"Inicia sesión para continuar!");
-        }else if(jTableCuentas.getRowCount() == 0){
-            JOptionPane.showMessageDialog(null,"No deje la partida sin contenido");
-        }else if(revisarTabla()){
-            JOptionPane.showMessageDialog(null,"Agregue datos a las cuentas.");
-        }else if(!errorPartidaDoble.getText().equals("")){
-            JOptionPane.showMessageDialog(null,"Asegurese de cumplir partida doble.");
+        if (!UserValidator.isSesionValida()) {
+            JOptionPane.showMessageDialog(null, "Inicia sesión para continuar!");
+        } else if (jTableCuentas.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(null, "No deje la partida sin contenido");
+        } else if (revisarTabla()) {
+            JOptionPane.showMessageDialog(null, "Agregue datos a las cuentas.");
+        } else if (!errorPartidaDoble.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Asegurese de cumplir partida doble.");
         } else {
             errorPartidaDoble.setText("");
-            //Codigo para ajustar las cuentas xd
+            Consulta con = new Consulta();
+
+            for (int i = 0; i < jTableAjustes.getRowCount(); i++) {
+                con.inicializar();
+                //Obteniendo datos de la tabla
+                Integer codigo = (Integer) jTableAjustes.getValueAt(i, 0);
+                String nombre = (String) jTableAjustes.getValueAt(i, 1);
+                List<Cuenta> arreglo = con.obtenerYFiltrar("modelo.Cuenta", "idCuenta =" + codigo);
+                Cuenta cuenta = arreglo.get(0);
+                BigDecimal debe = new BigDecimal((Double) jTableAjustes.getValueAt(i, 2));
+                BigDecimal haber = new BigDecimal((Double) jTableAjustes.getValueAt(i, 3));
+
+                //Obteniendo valores de la Cuenta para la suma acumulada.
+                Double debeCuenta = cuenta.getSumaDebe().doubleValue();
+                Double haberCuenta = cuenta.getSumaHaber().doubleValue();
+
+                //Asignando valores a la cuenta correspondiente, sumatoria acumulada.
+                BigDecimal debeTotalCuenta = new BigDecimal(debeCuenta + debe.doubleValue());
+                BigDecimal haberTotalCuenta = new BigDecimal(haberCuenta + haber.doubleValue());
+                cuenta.setSumaDebe(debeTotalCuenta);
+                cuenta.setSumaHaber(haberTotalCuenta);
+                Double saldo = Math.abs(debeCuenta - haberCuenta);
+                BigDecimal saldoCuenta = new BigDecimal(saldo);
+                cuenta.setSumaDebe(debeTotalCuenta);
+                cuenta.setSumaHaber(haberTotalCuenta);
+                cuenta.setSaldo(saldoCuenta);
+                con.actualizar(cuenta);
+                con.cerrarConexion();
+                con.inicializar();
+                lista = con.obtener("Cuenta");
+                con.cerrarConexion();
+                JOptionPane.showMessageDialog(this, "Cuentas Ajustadas con éxito");
+            }
+
         }
-            
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-    try {
+        try {
             DefaultTableModel modelo = (DefaultTableModel) jTableAjustes.getModel();
             if (modelo.getRowCount() > 0) {
                 modelo.getDataVector().remove(jTableAjustes.getSelectedRow());
@@ -320,7 +360,7 @@ public class Ajuste extends javax.swing.JInternalFrame {
             }
         } catch (ArrayIndexOutOfBoundsException e) {
 
-    }
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
 
@@ -342,12 +382,14 @@ public class Ajuste extends javax.swing.JInternalFrame {
 
     private void initTablaCuentas() {
         DefaultTableModel modelo = (DefaultTableModel) jTableCuentas.getModel();
-        for(Cuenta c: lista)
-            if(c.getAjustable()&&c.getOperable())
-                modelo.addRow(new Object[]{c.getCodigo(),c.getNombreCuenta()});
+        for (Cuenta c : lista) {
+            if (c.getAjustable() && c.getOperable()) {
+                modelo.addRow(new Object[]{c.getCodigo(), c.getNombreCuenta()});
+            }
+        }
     }
 
-    private void revisarTablaAjustes(){
+    private void revisarTablaAjustes() {
         double sumaDebe = 0;
         double sumaHaber = 0;
         for (int i = 0; i < jTableAjustes.getRowCount(); i++) {
@@ -376,11 +418,11 @@ public class Ajuste extends javax.swing.JInternalFrame {
     private boolean revisarTabla() {
         DefaultTableModel modelo = (DefaultTableModel) jTableAjustes.getModel();
         for (int i = 0; i < modelo.getRowCount(); i++) {
-                Double debe = Double.parseDouble(String.valueOf(modelo.getValueAt(i, 2)));
-                Double haber = Double.parseDouble(String.valueOf(modelo.getValueAt(i, 3)));
-                if (debe==0 && haber == 0) {
-                    return true;
-                }
+            Double debe = Double.parseDouble(String.valueOf(modelo.getValueAt(i, 2)));
+            Double haber = Double.parseDouble(String.valueOf(modelo.getValueAt(i, 3)));
+            if (debe == 0 && haber == 0) {
+                return true;
+            }
         }
         return false;
     }

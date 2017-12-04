@@ -442,8 +442,6 @@ public class Partida extends javax.swing.JInternalFrame {
             generarTablaInicialBusqueda();
 
         }
-
-
     }//GEN-LAST:event_tfBusquedaNombreKeyReleased
 
     private void AgregarCuentaAPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarCuentaAPartidaActionPerformed
@@ -515,7 +513,7 @@ public class Partida extends javax.swing.JInternalFrame {
         LineaDePartida linea = new LineaDePartida();
        
         for(int i=0; i<tablaDePartida.getRowCount(); i++){
-            con.inicializar();
+           con.inicializar();
             //Obteniendo datos de la tabla
            Integer codigo = (Integer) tablaDePartida.getValueAt(i, 0);
            String nombre = (String) tablaDePartida.getValueAt(i, 1);
@@ -531,8 +529,11 @@ public class Partida extends javax.swing.JInternalFrame {
            //Asignando valores a la cuenta correspondiente, sumatoria acumulada.
            BigDecimal debeTotalCuenta = new BigDecimal(debeCuenta + debe.doubleValue());
            BigDecimal haberTotalCuenta = new BigDecimal(haberCuenta + haber.doubleValue());
+           Double saldo = Math.abs(debeCuenta-haberCuenta);
+           BigDecimal saldoCuenta = new BigDecimal(saldo);
            cuenta.setSumaDebe(debeTotalCuenta);
            cuenta.setSumaHaber(haberTotalCuenta);
+           cuenta.setSaldo(saldoCuenta);
            con.actualizar(cuenta);
            con.cerrarConexion();
            con.inicializar();
@@ -543,7 +544,8 @@ public class Partida extends javax.swing.JInternalFrame {
            linea.setHaber(haber);
            linea.setPartida(nuevaPartida);
            con.guardar(linea);
-          con.cerrarConexion();
+           lista = con.obtener("Cuenta");
+           con.cerrarConexion();
         }
         errorTablaPartida.setText("Guardado con exito. Puede crear otra partida o salir.");
        
