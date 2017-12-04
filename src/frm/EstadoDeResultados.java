@@ -239,6 +239,8 @@ public class EstadoDeResultados extends javax.swing.JInternalFrame {
             document.add(table);
             document.close();
 
+            ponerCuentasACero();
+
         } catch (DocumentException ex) {
             Logger.getLogger(EstadoDeCapital.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
@@ -354,7 +356,7 @@ public class EstadoDeResultados extends javax.swing.JInternalFrame {
 //            }
 //        }
         double totalIngresos = 0;
-        DefaultTableModel modelo = (DefaultTableModel)jTableIngresos.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) jTableIngresos.getModel();
         Consulta c = new Consulta();
         c.inicializar();
 
@@ -363,39 +365,70 @@ public class EstadoDeResultados extends javax.swing.JInternalFrame {
             modelo.addRow(new Object[]{q.getNombreCuenta(), q.getSumaHaber()});
             totalIngresos += q.getSumaHaber().doubleValue();
         }
-        
+
         tfTotalIngresos.setText(String.valueOf(totalIngresos));
 
         c.cerrarConexion();
-        
-        
+
         double totalEgresos = 0;
         DefaultTableModel modeloEgresos = (DefaultTableModel) jTableEgresos.getModel();
         Consulta d = new Consulta();
         d.inicializar();
         cuent.clear();
         cuent = d.obtenerYFiltrar("Cuenta", "codigo LIKE '4%' AND operable=true AND codigo <> '416' AND codigo <> '4161' AND codigo <> '4162' AND codigo <> '4163'");
-        for(Cuenta w: cuent){
+        for (Cuenta w : cuent) {
             modeloEgresos.addRow(new Object[]{w.getNombreCuenta(), w.getSumaDebe()});
             totalEgresos += w.getSumaDebe().doubleValue();
         }
-        
+
         d.cerrarConexion();
         tfTotalEgresos.setText(String.valueOf(totalEgresos));
-        
+
         double utilidad = totalIngresos - totalEgresos;
-        
+
         tfUtilidad.setText(String.valueOf(utilidad));
-        
-        
+
         Consulta x = new Consulta();
         x.inicializar();
-        Cuenta yoyo = (Cuenta)x.getByID("Cuenta", "321");
+        Cuenta yoyo = (Cuenta) x.getByID("Cuenta", "321");
         yoyo.setSumaHaber(BigDecimal.valueOf(utilidad));
         x.actualizar(yoyo);
         x.cerrarConexion();
-        
+
         return utilidad;
+
+    }
+
+    private void ponerCuentasACero() {
+
+        Consulta x = new Consulta();
+        x.inicializar();
+        List<Cuenta> cuent = x.obtenerYFiltrar("Cuenta", "codigo LIKE '51_%' AND operable=true");
+        x.cerrarConexion();
+        for (Cuenta q : cuent) {
+            Consulta c = new Consulta();
+            c.inicializar();
+            q.setSumaDebe(BigDecimal.valueOf(0.0));
+            q.setSumaHaber(BigDecimal.valueOf(0.0));
+            q.setSaldo(BigDecimal.valueOf(0.0));
+            c.actualizar(q);
+            c.cerrarConexion();
+        }
+
+        cuent.clear();
+        Consulta t = new Consulta();
+        t.inicializar();
+        cuent = t.obtenerYFiltrar("Cuenta", "codigo LIKE '4%' AND operable=true AND codigo <> '416' AND codigo <> '4161' AND codigo <> '4162' AND codigo <> '4163'");
+        t.cerrarConexion();
+        for (Cuenta w : cuent) {
+            Consulta d = new Consulta();
+            d.inicializar();
+            w.setSumaDebe(BigDecimal.valueOf(0.0));
+            w.setSumaHaber(BigDecimal.valueOf(0.0));
+            w.setSaldo(BigDecimal.valueOf(0.0));
+            d.actualizar(w);
+            d.cerrarConexion();
+        }
 
     }
 }
